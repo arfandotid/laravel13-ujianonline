@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use App\Traits\FileUploadTrait;
 
 class ProfileController extends Controller
 {
+    use FileUploadTrait;
+
     public function index()
     {
         $user = Auth::user();
@@ -23,12 +26,17 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
             'username' => 'required|string|max:255|unique:users,username,' . $userId,
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = User::findOrFail($userId);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->username = $request->username;
+
+        if ($request->hasFile('avatar')) {
+            $user->avatar = $this->updateFile($request, 'avatar', 'uploads/avatars', $user->avatar);
+        }
 
         try {
             $user->save();

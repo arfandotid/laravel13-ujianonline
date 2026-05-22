@@ -16,6 +16,9 @@ import {
     TableBody,
     TableCell,
 } from "@/Components/BasicTable";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { APP_URL } from "@/constants/app";
+import { Badge } from "@/Components/ui/badge";
 
 export default function UsersIndex() {
     const { users } = usePage().props;
@@ -40,10 +43,12 @@ export default function UsersIndex() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>No.</TableHead>
+                                <TableHead>Avatar</TableHead>
                                 <TableHead>Nama</TableHead>
                                 <TableHead>Email</TableHead>
                                 <TableHead>Username</TableHead>
                                 <TableHead>Role</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead className="w-7">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -56,6 +61,19 @@ export default function UsersIndex() {
                                                 (users.current_page - 1) *
                                                     users.per_page}
                                         </TableCell>
+                                        <TableCell>
+                                            <Avatar className="h-8 w-8 rounded-full">
+                                                <AvatarImage
+                                                    src={`${APP_URL}/uploads/avatars/${user.avatar}`}
+                                                    alt={user.name}
+                                                />
+                                                <AvatarFallback className="rounded-full">
+                                                    {user.name
+                                                        .charAt(0)
+                                                        .toUpperCase()}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell>{user.username}</TableCell>
@@ -65,6 +83,23 @@ export default function UsersIndex() {
                                                       .map((role) => role.name)
                                                       .join(", ")
                                                 : "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.is_active == "1" ? (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-green-100 text-green-900"
+                                                >
+                                                    Aktif
+                                                </Badge>
+                                            ) : (
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="bg-red-100 text-red-900"
+                                                >
+                                                    Non-Aktif
+                                                </Badge>
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center space-x-2">

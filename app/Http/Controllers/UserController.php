@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Traits\FileUploadTrait;
 
 class UserController extends Controller implements HasMiddleware
 {
+    use FileUploadTrait;
     public static function middleware()
     {
         return [
@@ -50,7 +52,7 @@ class UserController extends Controller implements HasMiddleware
         return Inertia::render('Users/Create', compact('roles'));
     }
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $request->validate([
             'name'     => 'required|string|max:255',
@@ -59,17 +61,27 @@ class UserController extends Controller implements HasMiddleware
             'password' => 'required|min:8',
             'roles'    => 'required|array',
             'roles.*'  => 'exists:roles,id',
+            'is_active' => 'required',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
-        $user = User::create([
+        $data = [
             'name'     => $request->name,
             'email'    => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-        ]);
+            'is_active' => $request->is_active,
+        ];
+
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = $this->uploadFile($request, 'avatar', 'uploads/avatars');
+        }
+
+        $user = User::create($data);
 
         // assign role
-        $user->syncRoles($request->roles);
+        $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
+        $user->syncRoles($roles);
 
         return redirect()->to('/users')->with('success', 'User created successfully.');
     }
@@ -92,29 +104,43 @@ class UserController extends Controller implements HasMiddleware
             'password' => 'nullable|min:8',
             'roles'    => 'required|array',
             'roles.*'  => 'exists:roles,id',
+            'is_active' => 'required',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
-        $user->update([
+        $data = [
             'name'     => $request->name,
             'email'    => $request->email,
             'username' => $request->username,
-        ]);
+            'is_active' => $request->is_active,
+        ];
 
-        // update password jika diisi
-        if ($request->password) {
-            $user->update([
-                'password' => Hash::make($request->password),
-            ]);
+        // update avatar jika diisi
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = $this->updateFile($request, 'avatar', 'uploads/avatars', $user->avatar);
         }
 
+        // update password jika diisi
+        if($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
         // sync role
-        $user->syncRoles($request->roles);
+        $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
+        $user->syncRoles($roles);
 
         return redirect()->to('/users')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user)
     {
+        if($user->avatar) {
+            $path = "/uploads/avatars/".$user->avatar;
+            $this->deleteFile($path);
+        }
+
         $user->delete();
 
         return redirect()->to('/users')->with('success', 'User deleted successfully.');
