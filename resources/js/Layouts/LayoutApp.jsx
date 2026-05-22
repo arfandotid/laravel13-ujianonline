@@ -2,21 +2,19 @@ import { AppSidebar } from "@/Components/Sidebar/AppSidebar";
 import NavBreadcrumb from "@/Components/Sidebar/NavBreadcrumb";
 import { ThemeProvider } from "@/Components/ThemeProvider";
 import { ThemeToggle } from "@/Components/ThemeToggle";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/Components/ui/separator";
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "@/Components/ui/sidebar";
 import { usePage } from "@inertiajs/react";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 export default function LayoutApp({ children }) {
-    // destruct auth dan flash dari props
     const { auth, flash } = usePage().props;
 
-    // useEffect untuk menampilkan Sweet Alert jika ada flash message
     useEffect(() => {
         if (flash?.success) {
             Swal.fire({
@@ -32,9 +30,7 @@ export default function LayoutApp({ children }) {
                 icon: "error",
                 title: "ERROR!",
                 text: flash.error,
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
+                showConfirmButton: true,
             });
         }
     }, [flash]);

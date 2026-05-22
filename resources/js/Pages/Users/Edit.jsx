@@ -6,6 +6,9 @@ import { Input } from "@/Components/ui/input";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
+import StatusSelect from "@/Components/StatusSelect";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { APP_URL } from "@/constants/app";
 
 export default function UsersEdit() {
     const { user, roles, userRoles } = usePage().props;
@@ -16,6 +19,8 @@ export default function UsersEdit() {
         username: user.username || "",
         password: "",
         roles: userRoles || [],
+        is_active: user.is_active,
+        avatar: null,
     });
 
     const toggleRole = (id) => {
@@ -142,6 +147,41 @@ export default function UsersEdit() {
                                     {errors.roles}
                                 </FieldDescription>
                             )}
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Avatar</FieldLabel>
+                            <div className="flex">
+                                <Avatar className="h-8 w-8 rounded-full">
+                                    <AvatarImage
+                                        src={`${APP_URL}/uploads/avatars/${user.avatar}`}
+                                        alt={user.name}
+                                    />
+                                    <AvatarFallback className="rounded-full">
+                                        {user.name.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </div>
+                            <Input
+                                type="file"
+                                onChange={(e) =>
+                                    setData("avatar", e.target.files[0])
+                                }
+                                className={`${errors.avatar ? "border-red-500" : ""}`}
+                            />
+                            {errors.avatar && (
+                                <FieldDescription className="mt-1 text-sm text-red-600">
+                                    {errors.avatar}
+                                </FieldDescription>
+                            )}
+                        </Field>
+
+                        <Field>
+                            <FieldLabel>Status</FieldLabel>
+                            <StatusSelect
+                                value={data.is_active}
+                                onChange={(val) => setData("is_active", val)}
+                            />
                         </Field>
                     </div>
 

@@ -31,6 +31,16 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            if (Auth::user()->is_active == 0) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors([
+                    'login' => 'Akun Anda tidak aktif.',
+                ]);
+            }
+
             return redirect()->to('/dashboard');
         }
 

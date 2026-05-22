@@ -2,7 +2,7 @@
 
 import { ChevronsUpDown, Lock, LogOut, UserCog2 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,14 +10,15 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/Components/ui/dropdown-menu";
 import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
-} from "@/components/ui/sidebar";
+} from "@/Components/ui/sidebar";
 import { Link } from "@inertiajs/react";
+import { APP_URL } from "@/constants/app";
 
 export function NavUser({ auth }) {
     const { isMobile } = useSidebar();
@@ -31,12 +32,12 @@ export function NavUser({ auth }) {
                             size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
-                            <Avatar className="h-8 w-8 rounded-lg">
+                            <Avatar className="h-8 w-8 rounded-full">
                                 <AvatarImage
-                                    src={auth.user.avatar}
+                                    src={`${APP_URL}/uploads/avatars/${auth.user.avatar}`}
                                     alt={auth.user.name}
                                 />
-                                <AvatarFallback className="rounded-lg">
+                                <AvatarFallback className="rounded-full">
                                     {auth.user.name.charAt(0).toUpperCase()}
                                 </AvatarFallback>
                             </Avatar>
@@ -59,12 +60,12 @@ export function NavUser({ auth }) {
                     >
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <Avatar className="h-8 w-8 rounded-lg">
+                                <Avatar className="h-8 w-8 rounded-full">
                                     <AvatarImage
-                                        src={auth.user.avatar}
+                                        src={`${APP_URL}/uploads/avatars/${auth.user.avatar}`}
                                         alt={auth.user.name}
                                     />
-                                    <AvatarFallback className="rounded-lg">
+                                    <AvatarFallback className="rounded-full">
                                         {auth.user.name.charAt(0).toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar>
