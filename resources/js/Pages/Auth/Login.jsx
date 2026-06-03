@@ -15,7 +15,7 @@ import {
     FieldLabel,
 } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { Loader2, LogIn } from "lucide-react";
 
 export default function Login({ className, ...props }) {
@@ -83,12 +83,12 @@ export default function Login({ className, ...props }) {
                                             <FieldLabel htmlFor="password">
                                                 Password
                                             </FieldLabel>
-                                            {/* <a
-                                                href="#"
+                                            <Link
+                                                href="/forgot-password"
                                                 className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                                             >
                                                 Lupa password?
-                                            </a> */}
+                                            </Link>
                                         </div>
                                         <Input
                                             type="password"
