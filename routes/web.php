@@ -20,6 +20,24 @@ Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'store
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])
     ->name('logout');
 
+// Forgot Password
+Route::get('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+// Reset Password
+Route::get('/reset-password/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
+
 Route::group(['middleware' => ['auth']], function () {
     // route dashboard
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
