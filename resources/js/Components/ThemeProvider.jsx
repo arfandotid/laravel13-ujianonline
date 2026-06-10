@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { Toaster } from "./ui/sonner";
 
 const initialState = {
     theme: "system",
@@ -47,6 +48,7 @@ export function ThemeProvider({
     return (
         <ThemeProviderContext.Provider {...props} value={value}>
             {children}
+            <Toaster />
         </ThemeProviderContext.Provider>
     );
 }

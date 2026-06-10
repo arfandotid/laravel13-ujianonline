@@ -1,3 +1,4 @@
+import PwaInstallPrompt from "@/Components/PwaInstallPrompt";
 import { ThemeProvider } from "@/Components/ThemeProvider";
 import { ThemeToggle } from "@/Components/ThemeToggle";
 import { APP_URL } from "@/constants/app";
@@ -11,6 +12,7 @@ export default function LayoutAuth({ children }) {
     return (
         <>
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <PwaInstallPrompt />
                 <div className="relative bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
                     {/* THEME TOGGLE */}
                     <div className="absolute right-6 top-6">
@@ -24,11 +26,7 @@ export default function LayoutAuth({ children }) {
                         >
                             {settings?.app_logo ? (
                                 <img
-                                    src={
-                                        APP_URL +
-                                        "/uploads/settings/logo/" +
-                                        settings.app_logo
-                                    }
+                                    src={`${APP_URL}/uploads/settings/logo/${settings.app_logo}`}
                                     alt="App Logo"
                                     className="flex size-6 items-center justify-center rounded-md"
                                 />
