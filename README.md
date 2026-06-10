@@ -9,6 +9,7 @@ Tech :
 - Inertia
 - React Jsx
 - Shadcn UI
+- PWA Ready
 
 ## Install
 
@@ -28,3 +29,5 @@ Tech :
     <pre><code>php artisan serve</code></pre>
     React :
     <pre><code>npm run dev</code></pre>
+    Build for production :
+    <pre><code>npm run build</code></pre>

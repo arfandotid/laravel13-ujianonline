@@ -23,3 +23,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<Files "sw.js">
+    <IfModule mod_headers.c>
+        Header set Service-Worker-Allowed "/"
+    </IfModule>
+</Files>
