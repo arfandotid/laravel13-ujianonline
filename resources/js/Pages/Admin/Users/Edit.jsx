@@ -1,6 +1,7 @@
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, Link, useForm, usePage, router } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
-import { Save } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
+import Swal from "sweetalert2";
 import PageHeader from "@/Components/common/PageHeader";
 import { Input } from "@/Components/ui/input";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
@@ -35,6 +36,23 @@ export default function UsersEdit() {
     const handleSubmit = (e) => {
         e.preventDefault();
         put(`/admin/users/${user.id}`);
+    };
+
+    const deleteAvatar = () => {
+        Swal.fire({
+            title: "Apakah Anda Yakin?",
+            text: "Avatar yang telah dihapus tidak dapat dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(`/admin/users/${user.id}/delete-avatar`);
+            }
+        });
     };
 
     return (
@@ -150,7 +168,7 @@ export default function UsersEdit() {
 
                         <Field>
                             <FieldLabel>Avatar</FieldLabel>
-                            <div className="flex">
+                            <div className="flex items-center gap-2">
                                 <Avatar className="h-8 w-8 rounded-full">
                                     <AvatarImage
                                         src={`${APP_URL}/uploads/avatars/${user.avatar}`}
@@ -160,6 +178,16 @@ export default function UsersEdit() {
                                         {user.name.charAt(0).toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar>
+                                {user.avatar && (
+                                    <Button
+                                        type="button"
+                                        onClick={deleteAvatar}
+                                        variant="destructive"
+                                        size="icon"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                )}
                             </div>
                             <Input
                                 type="file"

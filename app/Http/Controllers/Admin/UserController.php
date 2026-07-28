@@ -23,7 +23,7 @@ class UserController implements HasMiddleware
         return [
             new Middleware(['permission:users.index'], only: ['index']),
             new Middleware(['permission:users.create'], only: ['create', 'store']),
-            new Middleware(['permission:users.edit'], only: ['edit', 'update']),
+            new Middleware(['permission:users.edit'], only: ['edit', 'update', 'deleteAvatar']),
             new Middleware(['permission:users.delete'], only: ['destroy']),
         ];
     }
@@ -107,6 +107,20 @@ class UserController implements HasMiddleware
         $user->syncRoles($roles);
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+    }
+
+    public function deleteAvatar(int|string $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->avatar) {
+            $path = 'uploads/avatars/' . $user->avatar;
+            $this->deleteFile($path);
+        }
+
+        $user->update(['avatar' => null]);
+
+        return redirect()->route('admin.users.edit', $id)->with('success', 'Avatar berhasil dihapus.');
     }
 
     public function destroy(int|string $id): RedirectResponse

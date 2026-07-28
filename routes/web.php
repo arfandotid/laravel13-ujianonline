@@ -72,4 +72,8 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
 
     // route resource untuk user
     Route::resource('/users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+
+    // route delete avatar user
+    Route::delete('/users/{user}/delete-avatar', [App\Http\Controllers\Admin\UserController::class, 'deleteAvatar'])
+        ->name('admin.users.delete-avatar');
 });
