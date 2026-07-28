@@ -1,32 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel 13 + Inertia React + Spatie Permissions Starter
 
-# Laravel 13 Starter Code
+Web Application Admin Template modern yang dibangun menggunakan **Laravel 13**, **Inertia.js v2**, **React 19**, **TailwindCSS v4**, dan **Spatie Laravel Permission**.
 
-Tech :
+---
 
-- Laravel 13
-- Spatie Role
-- Inertia
-- React Jsx
-- Shadcn UI
+## 🚀 Tech Stack
 
-## Install
+- **Backend**: Laravel 13 (PHP 8.3+)
+- **Frontend**: React 19 + Inertia.js v2
+- **Styling**: TailwindCSS v4 + Shadcn UI primitives
+- **Access Control**: Spatie `laravel-permission` (Roles & Permissions)
+- **Database**: SQLite / MySQL / PostgreSQL
 
-1.  Install Packages <br>
-    Composer :
-    <pre><code>composer install</code></pre>
-    NPM :
-    <pre><code>npm install</code></pre>
-2.  Copy .env from example
-    <pre><code>cp .env.example .env</code></pre>
-3.  Generate App Key
-    <pre><code>php artisan key:generate</code></pre>
-4.  Create Database & Seeder
-    <pre><code>php artisan migrate --seed</code></pre>
-5.  Run Server <br/>
-    Laravel :
-    <pre><code>php artisan serve</code></pre>
-    React :
-    <pre><code>npm run dev</code></pre>
-    Build for production :
-    <pre><code>npm run build</code></pre>
+---
+
+## 📁 Struktur Folder Project
+
+```
+├── .agents/
+│   └── AGENTS.md            # Dokumentasi arsitektur & konvensi untuk AI agent
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/     # Controller per fitur (bebas base Controller)
+│   │   ├── Middleware/      # HandleInertiaRequests (Shared props)
+│   │   └── Requests/        # Form Request Validation per domain
+│   ├── Models/              # Eloquent Models (User, Setting)
+│   └── Traits/              # FileUploadTrait
+├── config/                  # Configuration files
+├── database/
+│   ├── migrations/          # DB Migrations
+│   └── seeders/             # Roles, Permissions, User seeders
+├── resources/
+│   └── js/
+│       ├── Components/
+│       │   ├── common/      # Reusable page components (PageHeader, Search, Delete, TablePagination, TableEmpty)
+│       │   ├── form/        # Form inputs & custom selects (StatusSelect)
+│       │   ├── table/       # Table wrapper components (BasicTable)
+│       │   ├── theme/       # Dark/Light mode theme provider & toggle
+│       │   ├── Sidebar/     # Sidebar navigation components & menuConfig
+│       │   └── ui/          # Low-level Shadcn UI primitives
+│       ├── Layouts/         # App & Auth Layouts
+│       ├── Pages/           # Inertia Views (Auth, Users, Roles, Permissions, Settings, Profile, Dashboard)
+│       ├── utils/           # Utility functions (permissions.js)
+│       └── constants/       # JS Constants (app.js)
+└── routes/
+    └── web.php              # Application web routes
+```
+
+---
+
+## 🛠️ Instalasi & Setup
+
+### 1. Clone & Install Dependencies
+
+```bash
+git clone <repository-url>
+cd laravel13-react-spatie
+
+# Install PHP dependencies
+composer install
+
+# Install JS dependencies
+npm install
+```
+
+### 2. Environment Setup
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 3. Database Migration & Seeding
+
+```bash
+php artisan migrate --seed
+```
+
+### 4. Run Development Server
+
+```bash
+# Menjalankan Laravel serve, Queue, dan Vite bersamaan:
+composer dev
+
+# Atau terpisah:
+php artisan serve
+npm run dev
+```
+
+---
+
+## 🔐 Credentials Default (dari Seeder)
+
+- **Email**: `admin@gmail.com`
+- **Password**: `password`

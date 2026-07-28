@@ -1,13 +1,6 @@
-// import Head dan Inertia hooks
 import { Head, useForm, usePage, router } from "@inertiajs/react";
-
-// import LayoutApp
 import LayoutApp from "@/Layouts/LayoutApp";
-
-// import icons
 import { Save, Trash2 } from "lucide-react";
-
-// SweetAlert2
 import Swal from "sweetalert2";
 import {
     Field,
@@ -17,33 +10,26 @@ import {
 } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { APP_URL } from "@/constants/app";
 
 export default function SettingsIndex() {
-    // destructure "setting" dari props page
     const { settings } = usePage().props;
 
-    // inisialisasi useForm dengan data awal dari "setting"
     const { data, setData, post, processing, errors } = useForm({
         app_name: settings?.app_name || "",
         app_logo: null,
-
         _method: "PUT",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // kirim data ke route "settings"
         post("/settings", {
             preserveScroll: true,
         });
     };
 
-    // method deleteLogo
     const deleteLogo = async () => {
-        // show sweet alert
         Swal.fire({
             title: "Apakah Anda Yakin?",
             text: "Data yang telah dihapus tidak dapat dikembalikan!",
@@ -54,15 +40,14 @@ export default function SettingsIndex() {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                // delete
-                router.delete(`/settings/delete-logo`);
+                router.delete("/settings/delete-logo");
             }
         });
     };
 
     return (
         <>
-            <Head title={`Pengaturan Aplikasi`} />
+            <Head title="Pengaturan Aplikasi" />
             <LayoutApp>
                 <PageHeader
                     title="Pengaturan"
@@ -89,20 +74,13 @@ export default function SettingsIndex() {
                                     {settings?.app_logo && (
                                         <>
                                             <a
-                                                href={
-                                                    APP_URL +
-                                                    "/uploads/settings/logo/" +
-                                                    settings?.app_logo
-                                                }
+                                                href={`${APP_URL}/uploads/settings/logo/${settings?.app_logo}`}
                                                 target="_blank"
+                                                rel="noreferrer"
                                                 className="cursor-zoom-in"
                                             >
                                                 <img
-                                                    src={
-                                                        APP_URL +
-                                                        "/uploads/settings/logo/" +
-                                                        settings?.app_logo
-                                                    }
+                                                    src={`${APP_URL}/uploads/settings/logo/${settings?.app_logo}`}
                                                     alt="Logo Aplikasi"
                                                     className="w-10 h-10 object-contain border rounded-md"
                                                 />
@@ -145,7 +123,6 @@ export default function SettingsIndex() {
                             </Field>
                         </div>
 
-                        {/* Action */}
                         <div>
                             <Button type="submit" disabled={processing}>
                                 <Save />

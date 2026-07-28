@@ -1,34 +1,13 @@
-// import Head dan Link dari Inertia
 import { Head, Link, usePage } from "@inertiajs/react";
-
-// import LayoutApp
 import LayoutApp from "@/Layouts/LayoutApp";
-
-// import hasAnyPermission
-import hasAnyPermission from "@/Utils/Permission";
-
-// import icons
+import hasAnyPermission from "@/utils/permissions";
 import { Edit } from "lucide-react";
-
-// import component PageHeader
-import PageHeader from "@/Shared/PageHeader";
-
-// import component TableEmpty
-import TableEmpty from "@/Shared/TableEmpty";
-
-// import component Search
-import Search from "@/Shared/Search";
-
-// import component Delete
-import Delete from "@/Shared/Delete";
-
-// Import table pagination
-import TablePagination from "@/Shared/TablePagination";
-
-// import component Button
+import PageHeader from "@/Components/common/PageHeader";
+import TableEmpty from "@/Components/common/TableEmpty";
+import Search from "@/Components/common/Search";
+import Delete from "@/Components/common/Delete";
+import TablePagination from "@/Components/common/TablePagination";
 import { Button } from "@/Components/ui/button";
-
-// import basic table components
 import {
     Table,
     TableHeader,
@@ -36,17 +15,15 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/Components/BasicTable";
+} from "@/Components/table/BasicTable";
 
 export default function PermissionsIndex() {
-    // destruct props "permissions" dari usePage
     const { permissions } = usePage().props;
 
     return (
         <>
-            <Head title={`Permissions`} />
+            <Head title="Permissions" />
             <LayoutApp>
-                {/* Header */}
                 <PageHeader
                     showButton
                     title="Permissions"
@@ -56,11 +33,9 @@ export default function PermissionsIndex() {
                     permission="permissions.create"
                 />
 
-                {/* Card */}
                 <div className="space-y-5">
-                    <Search URL={"/permissions"} />
+                    <Search URL="/permissions" />
 
-                    {/* Table */}
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -100,7 +75,7 @@ export default function PermissionsIndex() {
                                                     "permissions.delete",
                                                 ]) && (
                                                     <Delete
-                                                        URL={"/permissions"}
+                                                        URL="/permissions"
                                                         id={permission.id}
                                                     />
                                                 )}
@@ -118,7 +93,6 @@ export default function PermissionsIndex() {
                         </TableBody>
                     </Table>
 
-                    {/* Pagination */}
                     <TablePagination links={permissions.links} />
                 </div>
             </LayoutApp>

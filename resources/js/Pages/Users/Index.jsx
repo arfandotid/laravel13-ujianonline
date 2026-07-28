@@ -1,12 +1,12 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
-import hasAnyPermission from "@/Utils/Permission";
+import hasAnyPermission from "@/utils/permissions";
 import { Edit } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
-import TableEmpty from "@/Shared/TableEmpty";
-import Search from "@/Shared/Search";
-import Delete from "@/Shared/Delete";
-import TablePagination from "@/Shared/TablePagination";
+import PageHeader from "@/Components/common/PageHeader";
+import TableEmpty from "@/Components/common/TableEmpty";
+import Search from "@/Components/common/Search";
+import Delete from "@/Components/common/Delete";
+import TablePagination from "@/Components/common/TablePagination";
 import { Button } from "@/Components/ui/button";
 import {
     Table,
@@ -15,7 +15,7 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/Components/BasicTable";
+} from "@/Components/table/BasicTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { APP_URL } from "@/constants/app";
 import { Badge } from "@/Components/ui/badge";
@@ -25,7 +25,7 @@ export default function UsersIndex() {
 
     return (
         <>
-            <Head title={`Users`} />
+            <Head title="Users" />
             <LayoutApp>
                 <PageHeader
                     showButton
@@ -37,7 +37,7 @@ export default function UsersIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL={"/users"} />
+                    <Search URL="/users" />
 
                     <Table>
                         <TableHeader>
@@ -122,7 +122,7 @@ export default function UsersIndex() {
                                                     "users.delete",
                                                 ]) && (
                                                     <Delete
-                                                        URL={"/users"}
+                                                        URL="/users"
                                                         id={user.id}
                                                     />
                                                 )}
@@ -134,13 +134,12 @@ export default function UsersIndex() {
                                 <TableEmpty
                                     title="Tidak ada User"
                                     description="Silahkan tambahkan user baru"
-                                    colSpan={6}
+                                    colSpan={8}
                                 />
                             )}
                         </TableBody>
                     </Table>
 
-                    {/* Pagination */}
                     <TablePagination links={users.links} />
                 </div>
             </LayoutApp>

@@ -1,39 +1,32 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import { Save } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 
 export default function PermissionsCreate() {
-    // useForm untuk mengelola form data
     const { data, setData, post, processing, errors } = useForm({
         name: "",
     });
 
-    // fungsi handleSubmit
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // kirim data ke server
         post("/permissions");
     };
 
     return (
         <>
-            <Head title={`Tambah Permission`} />
+            <Head title="Tambah Permission" />
             <LayoutApp>
-                {/* Header */}
                 <PageHeader
                     title="Tambah Permission"
                     description="Buat permission baru untuk hak akses pengguna"
                 />
 
-                {/* Card */}
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-5">
-                        {/* Name */}
                         <Field>
                             <FieldLabel>Nama Permission</FieldLabel>
                             <Input
@@ -53,7 +46,6 @@ export default function PermissionsCreate() {
                         </Field>
                     </div>
 
-                    {/* Tombol Aksi */}
                     <div className="flex justify-start space-x-2 pt-6">
                         <Button type="submit" disabled={processing}>
                             <Save />

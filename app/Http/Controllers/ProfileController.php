@@ -3,33 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Traits\FileUploadTrait;
+use App\Http\Requests\Profile\UpdateProfileRequest;
+use App\Http\Requests\Profile\UpdatePasswordRequest;
 
-class ProfileController extends Controller
+class ProfileController
 {
     use FileUploadTrait;
 
-    public function index()
+    public function index(): Response
     {
         $user = Auth::user();
         return Inertia::render('Profile/Index', compact('user'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfileRequest $request): RedirectResponse
     {
-        $userId = Auth::user()->id;
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
-            'username' => 'required|string|max:255|unique:users,username,' . $userId,
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
+        $userId = Auth::id();
         $user = User::findOrFail($userId);
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->username = $request->username;
@@ -41,49 +38,40 @@ class ProfileController extends Controller
         try {
             $user->save();
         } catch (\Exception $e) {
-            return redirect()->to('/profile')->with('error', 'Failed to update profile: ' . $e->getMessage());
+            return redirect()->route('profile.index')->with('error', 'Failed to update profile: ' . $e->getMessage());
         }
 
-        return redirect()->to('/profile')->with('success', 'Profile updated successfully.');
+        return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');
     }
 
-    public function changePassword()
+    public function changePassword(): Response
     {
         return Inertia::render('Profile/ChangePassword');
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
     {
-        $userId = Auth::user()->id;
-        $request->validate([
-            'current_password'  => 'required|string',
-            'password'          => 'required|string|min:8|confirmed',
-        ]);
-
+        $userId = Auth::id();
         $user = User::findOrFail($userId);
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->to('/profile/password')
-                ->withErrors(
-                    ['current_password' => 'Current password is incorrect.']
-                );
+            return redirect()->route('profile.password.index')
+                ->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 
         if (Hash::check($request->password, $user->password)) {
-            return redirect()->to('/profile/password')
-                ->withErrors(
-                    ['password' => 'New password must be different from current password.']
-                );
+            return redirect()->route('profile.password.index')
+                ->withErrors(['password' => 'New password must be different from current password.']);
         }
 
-        $user->password = bcrypt($request->password);
+        $user->password = Hash::make($request->password);
 
         try {
             $user->save();
         } catch (\Exception $e) {
-            return redirect()->to('/profile/password')->with('error', 'Failed to update password: ' . $e->getMessage());
+            return redirect()->route('profile.password.index')->with('error', 'Failed to update password: ' . $e->getMessage());
         }
 
-        return redirect()->to('/profile/password')->with('success', 'Password updated successfully.');
+        return redirect()->route('profile.password.index')->with('success', 'Password updated successfully.');
     }
 }

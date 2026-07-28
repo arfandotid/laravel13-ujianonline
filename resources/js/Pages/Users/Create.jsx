@@ -1,12 +1,12 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import { Save } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
-import StatusSelect from "@/Components/StatusSelect";
+import StatusSelect from "@/Components/form/StatusSelect";
 
 export default function UsersCreate() {
     const { roles } = usePage().props;
@@ -32,13 +32,12 @@ export default function UsersCreate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         post("/users");
     };
 
     return (
         <>
-            <Head title={`Tambah User`} />
+            <Head title="Tambah User" />
             <LayoutApp>
                 <PageHeader
                     title="Tambah User"
@@ -122,8 +121,8 @@ export default function UsersCreate() {
                                     <Checkbox
                                         id={`role-${role.id}`}
                                         checked={data.roles.includes(role.id)}
-                                        onCheckedChange={(checked) => {
-                                            toggleRole(role.id, checked);
+                                        onCheckedChange={() => {
+                                            toggleRole(role.id);
                                         }}
                                     />
                                     <FieldLabel htmlFor={`role-${role.id}`}>

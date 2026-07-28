@@ -1,44 +1,34 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import { Save } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Button } from "@/Components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 
 export default function PermissionsEdit() {
-    // destruct permission dari props
     const { permission } = usePage().props;
 
-    // useForm untuk mengelola form data
     const { data, setData, put, processing, errors } = useForm({
         name: permission.name || "",
     });
 
-    // fungsi handleSubmit
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // kirim data ke server
         put(`/permissions/${permission.id}`);
     };
 
     return (
         <>
-            <Head
-                title={`Edit Permission - ${import.meta.env.VITE_APP_NAME}`}
-            />
+            <Head title={`Edit Permission - ${import.meta.env.VITE_APP_NAME}`} />
             <LayoutApp>
-                {/* Header */}
                 <PageHeader
                     title="Edit Permission"
                     description="Perbarui data permission untuk hak akses pengguna"
                 />
 
-                {/* Card */}
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-5">
-                        {/* Name */}
                         <Field>
                             <FieldLabel>Nama Permission</FieldLabel>
                             <Input
@@ -58,7 +48,6 @@ export default function PermissionsEdit() {
                         </Field>
                     </div>
 
-                    {/* Tombol Aksi */}
                     <div className="flex justify-start space-x-2 pt-6">
                         <Button type="submit" disabled={processing}>
                             <Save />

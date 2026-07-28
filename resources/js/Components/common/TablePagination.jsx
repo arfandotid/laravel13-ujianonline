@@ -9,7 +9,6 @@ import {
 } from "@/Components/ui/pagination";
 
 export default function TablePagination({ links }) {
-    // Pisahkan previous, next, dan page number links
     const prevLink = links[0];
     const nextLink = links[links.length - 1];
     const pageLinks = links.slice(1, -1);
@@ -17,7 +16,6 @@ export default function TablePagination({ links }) {
     const currentPage = pageLinks.findIndex((link) => link.active) + 1;
     const totalPages = pageLinks.length;
 
-    // Tentukan halaman mana yang ditampilkan
     const getVisiblePages = () => {
         if (totalPages <= 7) {
             return pageLinks.map((_, i) => i + 1);
@@ -37,7 +35,6 @@ export default function TablePagination({ links }) {
     return (
         <Pagination className="flex justify-end">
             <PaginationContent>
-                {/* Previous */}
                 <PaginationItem>
                     {prevLink.url ? (
                         <PaginationPrevious href={prevLink.url} />
@@ -46,13 +43,11 @@ export default function TablePagination({ links }) {
                     )}
                 </PaginationItem>
 
-                {/* Page Numbers dengan Ellipsis */}
                 {visiblePages.map((page, i) => {
                     const prevPage = visiblePages[i - 1];
 
                     return (
                         <span key={page} className="flex items-center">
-                            {/* Tampilkan ellipsis jika ada gap */}
                             {prevPage && page - prevPage > 1 && (
                                 <PaginationItem>
                                     <PaginationEllipsis />
@@ -76,7 +71,6 @@ export default function TablePagination({ links }) {
                     );
                 })}
 
-                {/* Next */}
                 <PaginationItem>
                     {nextLink.url ? (
                         <PaginationNext href={nextLink.url} />

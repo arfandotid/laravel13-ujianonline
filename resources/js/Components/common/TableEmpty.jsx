@@ -1,4 +1,3 @@
-// import icons
 import { Inbox } from "lucide-react";
 
 export default function TableEmpty({ title, description, colSpan }) {

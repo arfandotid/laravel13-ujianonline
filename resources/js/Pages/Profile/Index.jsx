@@ -9,7 +9,7 @@ import {
 } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { APP_URL } from "@/constants/app";
 
@@ -20,7 +20,6 @@ export default function ProfileIndex() {
         name: user?.name || "",
         email: user?.email || "",
         username: user?.username || "",
-
         _method: "PUT",
     });
 
@@ -34,7 +33,7 @@ export default function ProfileIndex() {
 
     return (
         <>
-            <Head title={`Profile`} />
+            <Head title="Profile" />
             <LayoutApp>
                 <PageHeader title="Profile" description="Kelola profil saya" />
 

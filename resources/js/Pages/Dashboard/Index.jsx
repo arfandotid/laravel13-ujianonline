@@ -1,18 +1,12 @@
-// import Head and Link dari Inertia
 import { Head } from "@inertiajs/react";
-
-// import LayoutApp
 import LayoutApp from "@/Layouts/LayoutApp";
-
-// import component PageHeader
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 
 export default function Dashboard() {
     return (
         <>
-            <Head title={`Dashboard`} />
+            <Head title="Dashboard" />
             <LayoutApp>
-                {/* Header */}
                 <PageHeader
                     showButton={false}
                     title="Dashboard"

@@ -5,18 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Traits\FileUploadTrait;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 
-class UserController extends Controller implements HasMiddleware
+class UserController implements HasMiddleware
 {
     use FileUploadTrait;
+
     public static function middleware()
     {
         return [
@@ -27,12 +28,12 @@ class UserController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index()
+    public function index(): Response
     {
         $users = User::query()
             ->with('roles:id,name')
-            ->when(request()->q, function ($users) {
-                $users->where(function ($q) {
+            ->when(request()->q, function ($query) {
+                $query->where(function ($q) {
                     $q->where('name', 'like', '%' . request()->q . '%')
                         ->orWhere('email', 'like', '%' . request()->q . '%');
                 });
@@ -41,35 +42,22 @@ class UserController extends Controller implements HasMiddleware
             ->paginate(5)
             ->withQueryString();
 
-        $users->appends(['q' => request()->q]);
-
         return Inertia::render('Users/Index', compact('users'));
     }
 
-    public function create()
+    public function create(): Response
     {
         $roles = Role::select('id', 'name')->orderBy('name')->get();
         return Inertia::render('Users/Create', compact('roles'));
     }
 
-     public function store(Request $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'username' => 'required|string|max:50|unique:users,username',
-            'password' => 'required|min:8',
-            'roles'    => 'required|array',
-            'roles.*'  => 'exists:roles,id',
-            'is_active' => 'required',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
-        ]);
-
         $data = [
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'username'  => $request->username,
+            'password'  => Hash::make($request->password),
             'is_active' => $request->is_active,
         ];
 
@@ -79,70 +67,59 @@ class UserController extends Controller implements HasMiddleware
 
         $user = User::create($data);
 
-        // assign role
         $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
         $user->syncRoles($roles);
 
-        return redirect()->to('/users')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    public function edit(User $user)
+    public function edit(int|string $id): Response
     {
-        $user->load('roles');
+        $user = User::with('roles')->findOrFail($id);
         $roles = Role::select('id', 'name')->orderBy('name')->get();
         $userRoles = $user->roles->pluck('id');
 
         return Inertia::render('Users/Edit', compact('user', 'roles', 'userRoles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, int|string $id): RedirectResponse
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
-            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
-            'password' => 'nullable|min:8',
-            'roles'    => 'required|array',
-            'roles.*'  => 'exists:roles,id',
-            'is_active' => 'required',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
-        ]);
+        $user = User::findOrFail($id);
 
         $data = [
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'username' => $request->username,
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'username'  => $request->username,
             'is_active' => $request->is_active,
         ];
 
-        // update avatar jika diisi
         if ($request->hasFile('avatar')) {
             $data['avatar'] = $this->updateFile($request, 'avatar', 'uploads/avatars', $user->avatar);
         }
 
-        // update password jika diisi
-        if($request->password) {
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
 
-        // sync role
         $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
         $user->syncRoles($roles);
 
-        return redirect()->to('/users')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user)
+    public function destroy(int|string $id): RedirectResponse
     {
-        if($user->avatar) {
-            $path = "/uploads/avatars/".$user->avatar;
+        $user = User::findOrFail($id);
+
+        if ($user->avatar) {
+            $path = "/uploads/avatars/" . $user->avatar;
             $this->deleteFile($path);
         }
 
         $user->delete();
 
-        return redirect()->to('/users')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

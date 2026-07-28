@@ -1,23 +1,20 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import { Save } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
 
 export default function RolesEdit() {
-    // props dari controller
     const { role, permissions, rolePermissions } = usePage().props;
 
-    // useForm untuk mengelola form data
     const { data, setData, put, processing, errors } = useForm({
         name: role.name || "",
         permissions: rolePermissions || [],
     });
 
-    // group permission berdasarkan prefix (roles.*, users.*, dll)
     const groupedPermissions = permissions.reduce((groups, permission) => {
         const [group] = permission.name.split(".");
         const groupName = group.charAt(0).toUpperCase() + group.slice(1);
@@ -30,7 +27,6 @@ export default function RolesEdit() {
         return groups;
     }, {});
 
-    // fungsi togglePermission
     const togglePermission = (id) => {
         setData(
             "permissions",
@@ -40,11 +36,8 @@ export default function RolesEdit() {
         );
     };
 
-    // fungsi handleSubmit
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // kirim data ke server
         put(`/roles/${role.id}`);
     };
 
@@ -52,16 +45,13 @@ export default function RolesEdit() {
         <>
             <Head title={`Edit Role - ${import.meta.env.VITE_APP_NAME}`} />
             <LayoutApp>
-                {/* Header */}
                 <PageHeader
                     title="Edit Role"
                     description="Perbarui role dan hak akses yang dimiliki"
                 />
 
-                {/* Card */}
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-5">
-                        {/* Role Name */}
                         <Field>
                             <FieldLabel>Nama Role</FieldLabel>
                             <Input
@@ -80,11 +70,9 @@ export default function RolesEdit() {
                             )}
                         </Field>
 
-                        {/* Permissions */}
                         <Field>
                             <FieldLabel>Permissions</FieldLabel>
 
-                            {/* GRID GROUP */}
                             <div className="grid grid-cols-2 gap-4">
                                 {Object.keys(groupedPermissions).map(
                                     (group) => (
@@ -96,7 +84,6 @@ export default function RolesEdit() {
                                                 {group}
                                             </h4>
 
-                                            {/* CHECKBOX GRID */}
                                             <div className="grid grid-cols-1 gap-2">
                                                 {groupedPermissions[group].map(
                                                     (permission) => (
@@ -108,12 +95,9 @@ export default function RolesEdit() {
                                                                 checked={data.permissions.includes(
                                                                     permission.id,
                                                                 )}
-                                                                onCheckedChange={(
-                                                                    checked,
-                                                                ) => {
+                                                                onCheckedChange={() => {
                                                                     togglePermission(
                                                                         permission.id,
-                                                                        checked,
                                                                     );
                                                                 }}
                                                                 id={`permission-${permission.id}`}
@@ -142,7 +126,6 @@ export default function RolesEdit() {
                         </Field>
                     </div>
 
-                    {/* Tombol Aksi */}
                     <div className="flex justify-start space-x-2 pt-6">
                         <Button type="submit" disabled={processing}>
                             <Save />

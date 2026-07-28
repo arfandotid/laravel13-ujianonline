@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Http\Requests\Permission\StorePermissionRequest;
+use App\Http\Requests\Permission\UpdatePermissionRequest;
 
-class PermissionController extends Controller implements HasMiddleware
+class PermissionController implements HasMiddleware
 {
     public static function middleware()
     {
@@ -21,61 +23,56 @@ class PermissionController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index()
+    public function index(): Response
     {
         $permissions = Permission::query()
-            ->when(request()->q, function ($permissions) {
-                $permissions->where('name', 'like', '%' . request()->q . '%');
+            ->when(request()->q, function ($query) {
+                $query->where('name', 'like', '%' . request()->q . '%');
             })
             ->latest()
             ->paginate(5)
             ->withQueryString();
 
-        $permissions->appends(['q' => request()->q]);
-
         return Inertia::render('Permissions/Index', compact('permissions'));
     }
 
-    public function create()
+    public function create(): Response
     {
         return Inertia::render('Permissions/Create');
     }
 
-    public function store(Request $request)
+    public function store(StorePermissionRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|unique:permissions,name',
-        ]);
-
         Permission::create([
             'name' => $request->name,
         ]);
 
-        return redirect()->to('/permissions')->with('success', 'Permission created successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
     }
 
-    public function edit(Permission $permission)
+    public function edit(int|string $id): Response
     {
+        $permission = Permission::findOrFail($id);
+
         return Inertia::render('Permissions/Edit', compact('permission'));
     }
 
-    public function update(Request $request, Permission $permission)
+    public function update(UpdatePermissionRequest $request, int|string $id): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|unique:permissions,name,' . $permission->id,
-        ]);
+        $permission = Permission::findOrFail($id);
 
         $permission->update([
             'name' => $request->name,
         ]);
 
-        return redirect()->to('/permissions')->with('success', 'Permission updated successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
     }
 
-    public function destroy(Permission $permission)
+    public function destroy(int|string $id): RedirectResponse
     {
+        $permission = Permission::findOrFail($id);
         $permission->delete();
 
-        return redirect()->to('/permissions')->with('success', 'Permission deleted successfully.');
+        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
     }
 }

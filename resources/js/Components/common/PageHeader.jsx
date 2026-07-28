@@ -1,11 +1,6 @@
-// import Link
 import { Link } from "@inertiajs/react";
-
-// import icons
 import { Plus } from "lucide-react";
-
-// import hasAnyPermission
-import hasAnyPermission from "@/Utils/Permission";
+import hasAnyPermission from "@/utils/permissions";
 import { Button } from "@/Components/ui/button";
 
 export default function PageHeader({

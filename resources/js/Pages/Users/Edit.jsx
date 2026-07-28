@@ -1,12 +1,12 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import { Save } from "lucide-react";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 import { Input } from "@/Components/ui/input";
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
-import StatusSelect from "@/Components/StatusSelect";
+import StatusSelect from "@/Components/form/StatusSelect";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { APP_URL } from "@/constants/app";
 
@@ -34,7 +34,6 @@ export default function UsersEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         put(`/users/${user.id}`);
     };
 
@@ -131,8 +130,8 @@ export default function UsersEdit() {
                                             checked={data.roles.includes(
                                                 role.id,
                                             )}
-                                            onCheckedChange={(checked) => {
-                                                toggleRole(role.id, checked);
+                                            onCheckedChange={() => {
+                                                toggleRole(role.id);
                                             }}
                                         />
                                         <FieldLabel htmlFor={`role-${role.id}`}>
