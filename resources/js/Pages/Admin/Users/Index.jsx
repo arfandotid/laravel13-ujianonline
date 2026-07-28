@@ -31,13 +31,13 @@ export default function UsersIndex() {
                     showButton
                     title="Users"
                     description="Kelola data pengguna dan role akses"
-                    action="/users/create"
+                    action="/admin/users/create"
                     actionText="Tambah User"
                     permission="users.create"
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/users" />
+                    <Search URL="/admin/users" />
 
                     <Table>
                         <TableHeader>
@@ -107,7 +107,7 @@ export default function UsersIndex() {
                                                     "users.edit",
                                                 ]) && (
                                                     <Link
-                                                        href={`/users/${user.id}/edit`}
+                                                        href={`/admin/users/${user.id}/edit`}
                                                         title="Edit"
                                                     >
                                                         <Button
@@ -122,7 +122,7 @@ export default function UsersIndex() {
                                                     "users.delete",
                                                 ]) && (
                                                     <Delete
-                                                        URL="/users"
+                                                        URL="/admin/users"
                                                         id={user.id}
                                                     />
                                                 )}

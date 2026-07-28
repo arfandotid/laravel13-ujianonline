@@ -39,9 +39,6 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\ResetPasswordControll
     ->name('password.update');
 
 Route::group(['middleware' => ['auth']], function () {
-    // route dashboard
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
     // route profile
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
@@ -49,25 +46,30 @@ Route::group(['middleware' => ['auth']], function () {
     // route change password
     Route::get('/profile/password', [App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.password.index');
     Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
+
+Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], function () {
+    // route dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
     // route settings
-    Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])
-        ->name('settings.index');
+    Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])
+        ->name('admin.settings.index');
 
     // route settings update
-    Route::put('/settings', [App\Http\Controllers\SettingController::class, 'update'])
-        ->name('settings.update');
+    Route::put('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])
+        ->name('admin.settings.update');
 
     // route settings delete logo
-    Route::delete('/settings/delete-logo', [App\Http\Controllers\SettingController::class, 'deleteLogo'])
-        ->name('settings.delete-logo');
+    Route::delete('/settings/delete-logo', [App\Http\Controllers\Admin\SettingController::class, 'deleteLogo'])
+        ->name('admin.settings.delete-logo');
 
     // route resource untuk permission
-    Route::resource('/permissions', App\Http\Controllers\PermissionController::class);
+    Route::resource('/permissions', App\Http\Controllers\Admin\PermissionController::class)->names('admin.permissions');
 
     // route resource untuk role
-    Route::resource('/roles', App\Http\Controllers\RoleController::class);
+    Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class)->names('admin.roles');
 
     // route resource untuk user
-    Route::resource('/users', App\Http\Controllers\UserController::class);
+    Route::resource('/users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
 });

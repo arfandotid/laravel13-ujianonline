@@ -34,7 +34,7 @@ export default function UsersEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/users/${user.id}`);
+        put(`/admin/users/${user.id}`);
     };
 
     return (
@@ -189,7 +189,7 @@ export default function UsersEdit() {
                             <Save />
                             {processing ? "Menyimpan..." : "Simpan Perubahan"}
                         </Button>
-                        <Link href="/users">
+                        <Link href="/admin/users">
                             <Button variant="outline">Batal</Button>
                         </Link>
                     </div>

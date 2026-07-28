@@ -15,7 +15,7 @@ export default function PermissionsEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/permissions/${permission.id}`);
+        put(`/admin/permissions/${permission.id}`);
     };
 
     return (
@@ -53,7 +53,7 @@ export default function PermissionsEdit() {
                             <Save />
                             {processing ? "Menyimpan..." : "Simpan Perubahan"}
                         </Button>
-                        <Link href="/permissions">
+                        <Link href="/admin/permissions">
                             <Button variant="outline">Batal</Button>
                         </Link>
                     </div>

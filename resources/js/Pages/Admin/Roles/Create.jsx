@@ -7,12 +7,12 @@ import { Input } from "@/Components/ui/input";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
 
-export default function RolesEdit() {
-    const { role, permissions, rolePermissions } = usePage().props;
+export default function RolesCreate() {
+    const { permissions } = usePage().props;
 
-    const { data, setData, put, processing, errors } = useForm({
-        name: role.name || "",
-        permissions: rolePermissions || [],
+    const { data, setData, post, processing, errors } = useForm({
+        name: "",
+        permissions: [],
     });
 
     const groupedPermissions = permissions.reduce((groups, permission) => {
@@ -38,16 +38,16 @@ export default function RolesEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/roles/${role.id}`);
+        post("/admin/roles");
     };
 
     return (
         <>
-            <Head title={`Edit Role - ${import.meta.env.VITE_APP_NAME}`} />
+            <Head title={`Tambah Role - ${import.meta.env.VITE_APP_NAME}`} />
             <LayoutApp>
                 <PageHeader
-                    title="Edit Role"
-                    description="Perbarui role dan hak akses yang dimiliki"
+                    title="Tambah Role"
+                    description="Buat role baru dan tentukan hak aksesnya"
                 />
 
                 <form onSubmit={handleSubmit}>
@@ -129,9 +129,9 @@ export default function RolesEdit() {
                     <div className="flex justify-start space-x-2 pt-6">
                         <Button type="submit" disabled={processing}>
                             <Save />
-                            {processing ? "Menyimpan..." : "Simpan Perubahan"}
+                            {processing ? "Menyimpan..." : "Simpan"}
                         </Button>
-                        <Link href="/roles">
+                        <Link href="/admin/roles">
                             <Button variant="outline">Batal</Button>
                         </Link>
                     </div>

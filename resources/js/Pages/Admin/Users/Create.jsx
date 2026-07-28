@@ -32,7 +32,7 @@ export default function UsersCreate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/users");
+        post("/admin/users");
     };
 
     return (
@@ -165,7 +165,7 @@ export default function UsersCreate() {
                             <Save />
                             {processing ? "Menyimpan..." : "Simpan"}
                         </Button>
-                        <Link href="/users">
+                        <Link href="/admin/users">
                             <Button variant="outline">Batal</Button>
                         </Link>
                     </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Inertia\Inertia;
@@ -42,13 +42,13 @@ class UserController implements HasMiddleware
             ->paginate(5)
             ->withQueryString();
 
-        return Inertia::render('Users/Index', compact('users'));
+        return Inertia::render('Admin/Users/Index', compact('users'));
     }
 
     public function create(): Response
     {
         $roles = Role::select('id', 'name')->orderBy('name')->get();
-        return Inertia::render('Users/Create', compact('roles'));
+        return Inertia::render('Admin/Users/Create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request): RedirectResponse
@@ -70,7 +70,7 @@ class UserController implements HasMiddleware
         $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
         $user->syncRoles($roles);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     public function edit(int|string $id): Response
@@ -79,7 +79,7 @@ class UserController implements HasMiddleware
         $roles = Role::select('id', 'name')->orderBy('name')->get();
         $userRoles = $user->roles->pluck('id');
 
-        return Inertia::render('Users/Edit', compact('user', 'roles', 'userRoles'));
+        return Inertia::render('Admin/Users/Edit', compact('user', 'roles', 'userRoles'));
     }
 
     public function update(UpdateUserRequest $request, int|string $id): RedirectResponse
@@ -106,7 +106,7 @@ class UserController implements HasMiddleware
         $roles = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
         $user->syncRoles($roles);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(int|string $id): RedirectResponse
@@ -120,6 +120,6 @@ class UserController implements HasMiddleware
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 }

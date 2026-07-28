@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,12 +33,12 @@ class PermissionController implements HasMiddleware
             ->paginate(5)
             ->withQueryString();
 
-        return Inertia::render('Permissions/Index', compact('permissions'));
+        return Inertia::render('Admin/Permissions/Index', compact('permissions'));
     }
 
     public function create(): Response
     {
-        return Inertia::render('Permissions/Create');
+        return Inertia::render('Admin/Permissions/Create');
     }
 
     public function store(StorePermissionRequest $request): RedirectResponse
@@ -47,14 +47,14 @@ class PermissionController implements HasMiddleware
             'name' => $request->name,
         ]);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission created successfully.');
     }
 
     public function edit(int|string $id): Response
     {
         $permission = Permission::findOrFail($id);
 
-        return Inertia::render('Permissions/Edit', compact('permission'));
+        return Inertia::render('Admin/Permissions/Edit', compact('permission'));
     }
 
     public function update(UpdatePermissionRequest $request, int|string $id): RedirectResponse
@@ -65,7 +65,7 @@ class PermissionController implements HasMiddleware
             'name' => $request->name,
         ]);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission updated successfully.');
     }
 
     public function destroy(int|string $id): RedirectResponse
@@ -73,6 +73,6 @@ class PermissionController implements HasMiddleware
         $permission = Permission::findOrFail($id);
         $permission->delete();
 
-        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+        return redirect()->route('admin.permissions.index')->with('success', 'Permission deleted successfully.');
     }
 }

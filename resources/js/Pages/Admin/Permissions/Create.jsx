@@ -13,7 +13,7 @@ export default function PermissionsCreate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/permissions");
+        post("/admin/permissions");
     };
 
     return (
@@ -51,7 +51,7 @@ export default function PermissionsCreate() {
                             <Save />
                             {processing ? "Menyimpan..." : "Simpan"}
                         </Button>
-                        <Link href="/permissions">
+                        <Link href="/admin/permissions">
                             <Button variant="outline">Batal</Button>
                         </Link>
                     </div>

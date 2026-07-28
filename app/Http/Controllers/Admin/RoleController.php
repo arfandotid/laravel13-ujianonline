@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,13 +35,13 @@ class RoleController implements HasMiddleware
             ->paginate(5)
             ->withQueryString();
 
-        return Inertia::render('Roles/Index', compact('roles'));
+        return Inertia::render('Admin/Roles/Index', compact('roles'));
     }
 
     public function create(): Response
     {
         $permissions = Permission::select('id', 'name')->orderBy('name')->get();
-        return Inertia::render('Roles/Create', compact('permissions'));
+        return Inertia::render('Admin/Roles/Create', compact('permissions'));
     }
 
     public function store(StoreRoleRequest $request): RedirectResponse
@@ -54,7 +54,7 @@ class RoleController implements HasMiddleware
             $role->syncPermissions($request->permissions);
         }
 
-        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
     }
 
     public function edit(int|string $id): Response
@@ -63,7 +63,7 @@ class RoleController implements HasMiddleware
         $permissions = Permission::select('id', 'name')->orderBy('name')->get();
         $rolePermissions = $role->permissions->pluck('id');
 
-        return Inertia::render('Roles/Edit', compact('role', 'permissions', 'rolePermissions'));
+        return Inertia::render('Admin/Roles/Edit', compact('role', 'permissions', 'rolePermissions'));
     }
 
     public function update(UpdateRoleRequest $request, int|string $id): RedirectResponse
@@ -76,7 +76,7 @@ class RoleController implements HasMiddleware
 
         $role->syncPermissions($request->permissions ?? []);
 
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
     }
 
     public function destroy(int|string $id): RedirectResponse
@@ -84,6 +84,6 @@ class RoleController implements HasMiddleware
         $role = Role::findOrFail($id);
         $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
+        return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
     }
 }

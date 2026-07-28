@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,7 +27,7 @@ class SettingController implements HasMiddleware
     {
         $setting = Setting::first();
 
-        return Inertia::render('Settings/Index', compact('setting'));
+        return Inertia::render('Admin/Settings/Index', compact('setting'));
     }
 
     public function update(UpdateSettingRequest $request): RedirectResponse
@@ -51,7 +51,7 @@ class SettingController implements HasMiddleware
 
         $setting->update($data);
 
-        return redirect()->route('settings.index')->with('success', 'Setting updated successfully.');
+        return redirect()->route('admin.settings.index')->with('success', 'Setting updated successfully.');
     }
 
     public function deleteLogo(): RedirectResponse
@@ -67,6 +67,6 @@ class SettingController implements HasMiddleware
             'app_logo' => null,
         ]);
 
-        return redirect()->route('settings.index')->with('success', 'Logo aplikasi berhasil dihapus.');
+        return redirect()->route('admin.settings.index')->with('success', 'Logo aplikasi berhasil dihapus.');
     }
 }

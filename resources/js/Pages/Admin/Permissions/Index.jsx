@@ -6,8 +6,8 @@ import PageHeader from "@/Components/common/PageHeader";
 import TableEmpty from "@/Components/common/TableEmpty";
 import Search from "@/Components/common/Search";
 import Delete from "@/Components/common/Delete";
-import { Button } from "@/Components/ui/button";
 import TablePagination from "@/Components/common/TablePagination";
+import { Button } from "@/Components/ui/button";
 import {
     Table,
     TableHeader,
@@ -17,54 +17,50 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 
-export default function RolesIndex() {
-    const { roles } = usePage().props;
+export default function PermissionsIndex() {
+    const { permissions } = usePage().props;
 
     return (
         <>
-            <Head title="Roles" />
+            <Head title="Permissions" />
             <LayoutApp>
                 <PageHeader
                     showButton
-                    title="Roles"
-                    description="Kelola role dan hak akses pengguna"
-                    action="/roles/create"
-                    actionText="Tambah Role"
-                    permission="roles.create"
+                    title="Permissions"
+                    description="Kelola permission untuk hak akses pengguna"
+                    action="/admin/permissions/create"
+                    actionText="Tambah Permission"
+                    permission="permissions.create"
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/roles" />
+                    <Search URL="/admin/permissions" />
 
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>No.</TableHead>
-                                <TableHead>Nama Role</TableHead>
-                                <TableHead>Jumlah Permission</TableHead>
+                                <TableHead>Nama Permission</TableHead>
                                 <TableHead className="w-7">Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {roles && roles.data.length > 0 ? (
-                                roles.data.map((role, index) => (
-                                    <TableRow key={role.id}>
+                            {permissions && permissions.data.length > 0 ? (
+                                permissions.data.map((permission, index) => (
+                                    <TableRow key={permission.id}>
                                         <TableCell className="font-medium">
                                             {++index +
-                                                (roles.current_page - 1) *
-                                                    roles.per_page}
+                                                (permissions.current_page - 1) *
+                                                    permissions.per_page}
                                         </TableCell>
-                                        <TableCell>{role.name}</TableCell>
-                                        <TableCell>
-                                            {role.permissions_count}
-                                        </TableCell>
+                                        <TableCell>{permission.name}</TableCell>
                                         <TableCell>
                                             <div className="flex items-center space-x-2">
                                                 {hasAnyPermission([
-                                                    "roles.edit",
+                                                    "permissions.edit",
                                                 ]) && (
                                                     <Link
-                                                        href={`/roles/${role.id}/edit`}
+                                                        href={`/admin/permissions/${permission.id}/edit`}
                                                         title="Edit"
                                                     >
                                                         <Button
@@ -76,11 +72,11 @@ export default function RolesIndex() {
                                                     </Link>
                                                 )}
                                                 {hasAnyPermission([
-                                                    "roles.delete",
+                                                    "permissions.delete",
                                                 ]) && (
                                                     <Delete
-                                                        URL="/roles"
-                                                        id={role.id}
+                                                        URL="/admin/permissions"
+                                                        id={permission.id}
                                                     />
                                                 )}
                                             </div>
@@ -89,15 +85,15 @@ export default function RolesIndex() {
                                 ))
                             ) : (
                                 <TableEmpty
-                                    title="Tidak ada Role"
-                                    description="Silahkan tambahkan role baru"
-                                    colSpan={4}
+                                    title="Tidak ada Permission"
+                                    description="Silahkan tambahkan permission baru"
+                                    colSpan={3}
                                 />
                             )}
                         </TableBody>
                     </Table>
 
-                    <TablePagination links={roles.links} />
+                    <TablePagination links={permissions.links} />
                 </div>
             </LayoutApp>
         </>

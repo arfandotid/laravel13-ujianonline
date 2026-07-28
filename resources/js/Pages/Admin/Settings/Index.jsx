@@ -24,7 +24,7 @@ export default function SettingsIndex() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/settings", {
+        post("/admin/settings", {
             preserveScroll: true,
         });
     };
@@ -40,7 +40,7 @@ export default function SettingsIndex() {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                router.delete("/settings/delete-logo");
+                router.delete("/admin/settings/delete-logo");
             }
         });
     };
