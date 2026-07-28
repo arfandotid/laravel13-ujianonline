@@ -13,42 +13,47 @@ export default function TablePagination({ links }) {
     const nextLink = links[links.length - 1];
     const pageLinks = links.slice(1, -1);
 
-    const currentPage = pageLinks.findIndex((link) => link.active) + 1;
+    // Cari index active langsung dari data asli (bukan dihitung ulang)
+    const activeIndex = pageLinks.findIndex((link) => link.active);
     const totalPages = pageLinks.length;
 
-    const getVisiblePages = () => {
+    // Tentukan index (posisi array) mana yang ditampilkan, bukan "nomor halaman"
+    const getVisibleIndexes = () => {
         if (totalPages <= 7) {
-            return pageLinks.map((_, i) => i + 1);
+            return pageLinks.map((_, i) => i);
         }
 
-        const pages = new Set([1, totalPages]);
+        const indexes = new Set([0, totalPages - 1]);
 
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-            if (i >= 1 && i <= totalPages) pages.add(i);
+        for (let i = activeIndex - 1; i <= activeIndex + 1; i++) {
+            if (i >= 0 && i < totalPages) indexes.add(i);
         }
 
-        return Array.from(pages).sort((a, b) => a - b);
+        return Array.from(indexes).sort((a, b) => a - b);
     };
 
-    const visiblePages = getVisiblePages();
+    const visibleIndexes = getVisibleIndexes();
 
     return (
         <Pagination className="flex justify-end">
             <PaginationContent>
+                {/* Previous */}
                 <PaginationItem>
                     {prevLink.url ? (
-                        <PaginationPrevious href={prevLink.url} />
+                        <PaginationPrevious href={prevLink.url} preserveScroll />
                     ) : (
                         <PaginationPrevious className="pointer-events-none opacity-50" />
                     )}
                 </PaginationItem>
 
-                {visiblePages.map((page, i) => {
-                    const prevPage = visiblePages[i - 1];
+                {/* Page Numbers dengan Ellipsis */}
+                {visibleIndexes.map((idx, i) => {
+                    const prevIdx = visibleIndexes[i - 1];
+                    const link = pageLinks[idx];
 
                     return (
-                        <span key={page} className="flex items-center">
-                            {prevPage && page - prevPage > 1 && (
+                        <span key={link.label + idx} className="flex items-center">
+                            {prevIdx !== undefined && idx - prevIdx > 1 && (
                                 <PaginationItem>
                                     <PaginationEllipsis />
                                 </PaginationItem>
@@ -56,24 +61,24 @@ export default function TablePagination({ links }) {
 
                             <PaginationItem>
                                 <PaginationLink
-                                    href={pageLinks[page - 1].url ?? "#"}
-                                    isActive={pageLinks[page - 1].active}
+                                    href={link.url ?? "#"}
+                                    isActive={link.active}
                                     className={
-                                        !pageLinks[page - 1].url
-                                            ? "pointer-events-none opacity-50"
-                                            : ""
+                                        !link.url ? "pointer-events-none opacity-50" : ""
                                     }
+                                    preserveScroll
                                 >
-                                    {page}
+                                    {link.label}
                                 </PaginationLink>
                             </PaginationItem>
                         </span>
                     );
                 })}
 
+                {/* Next */}
                 <PaginationItem>
                     {nextLink.url ? (
-                        <PaginationNext href={nextLink.url} />
+                        <PaginationNext href={nextLink.url} preserveScroll />
                     ) : (
                         <PaginationNext className="pointer-events-none opacity-50" />
                     )}
