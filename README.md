@@ -9,7 +9,6 @@ Tech :
 - Inertia
 - React Jsx
 - Shadcn UI
-- PWA Ready
 
 ## Install
 
