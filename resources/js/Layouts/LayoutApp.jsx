@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/Components/Sidebar/AppSidebar";
 import NavBreadcrumb from "@/Components/Sidebar/NavBreadcrumb";
-import { ThemeProvider } from "@/Components/ThemeProvider";
-import { ThemeToggle } from "@/Components/ThemeToggle";
+import { ThemeProvider } from "@/Components/theme/ThemeProvider";
+import { ThemeToggle } from "@/Components/theme/ThemeToggle";
 import { Separator } from "@/Components/ui/separator";
 import {
     SidebarInset,
@@ -41,7 +41,6 @@ export default function LayoutApp({ children }) {
                 <AppSidebar auth={auth} />
                 <SidebarInset className="min-w-0">
                     <header className="flex h-16 shrink-0 items-center justify-between px-4">
-                        {/* LEFT SIDE */}
                         <div className="flex items-center gap-2">
                             <SidebarTrigger className="-ml-1" />
                             <Separator
@@ -51,7 +50,6 @@ export default function LayoutApp({ children }) {
                             <NavBreadcrumb />
                         </div>
 
-                        {/* RIGHT SIDE */}
                         <div>
                             <ThemeToggle />
                         </div>

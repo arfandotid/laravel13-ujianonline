@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class LoginController extends Controller
+class LoginController
 {
     public function index()
     {
@@ -41,7 +40,7 @@ class LoginController extends Controller
                 ]);
             }
 
-            return redirect()->to('/dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([
@@ -56,6 +55,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->to('/login');
+        return redirect()->route('login');
     }
 }

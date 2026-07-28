@@ -29,8 +29,5 @@
         "sonner": "^2.0.7",
         "sweetalert2": "^11.26.18",
         "tailwind-merge": "^3.5.0"
-    },
-    "overrides": {
-        "brace-expansion": "^2.0.2"
     }
 }

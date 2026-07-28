@@ -1,7 +1,4 @@
-// import helper
-import hasAnyPermission from "@/Utils/Permission";
-
-// import icons
+import hasAnyPermission from "@/utils/permissions";
 import {
     Users,
     UserCog,
@@ -11,12 +8,11 @@ import {
     LayoutDashboard,
 } from "lucide-react";
 
-// Menu items dengan permission check
 export const menuItems = [
     {
         name: "Dashboard",
         icon: LayoutDashboard,
-        href: "/dashboard",
+        href: "/admin/dashboard",
     },
     {
         name: "User Management",
@@ -25,19 +21,19 @@ export const menuItems = [
         dropdown: [
             {
                 name: "Roles",
-                href: "/roles",
+                href: "/admin/roles",
                 icon: Shield,
                 permissions: ["roles.index"],
             },
             {
                 name: "Permissions",
-                href: "/permissions",
+                href: "/admin/permissions",
                 icon: Key,
                 permissions: ["permissions.index"],
             },
             {
                 name: "Users",
-                href: "/users",
+                href: "/admin/users",
                 icon: Users,
                 permissions: ["users.index"],
             },
@@ -46,12 +42,11 @@ export const menuItems = [
     {
         name: "Settings",
         icon: Settings,
-        href: "/settings",
+        href: "/admin/settings",
         permissions: ["settings.index"],
     },
 ];
 
-// Filter menu items berdasarkan permission
 export const getFilteredMenuItems = () => {
     return menuItems.filter((item) => {
         if (item.permissions && item.permissions.length > 0) {
@@ -61,7 +56,6 @@ export const getFilteredMenuItems = () => {
     });
 };
 
-// Fungsi untuk filter dropdown items berdasarkan permission
 export const getFilteredDropdown = (dropdownItems) => {
     if (!dropdownItems) return [];
 

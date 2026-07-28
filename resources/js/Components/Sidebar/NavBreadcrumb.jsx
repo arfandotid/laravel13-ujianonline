@@ -25,7 +25,7 @@ export default function NavBreadcrumb() {
                 {/* Home */}
                 <BreadcrumbItem className="hidden md:block">
                     <BreadcrumbLink asChild>
-                        <Link href="/dashboard">Home</Link>
+                        <Link href="/admin/dashboard">Home</Link>
                     </BreadcrumbLink>
                 </BreadcrumbItem>
 

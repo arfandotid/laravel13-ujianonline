@@ -9,22 +9,19 @@ import {
 } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import PageHeader from "@/Shared/PageHeader";
+import PageHeader from "@/Components/common/PageHeader";
 
 export default function ChangePassword() {
-    // inisialisasi useForm dengan data awal dari "user"
     const { data, setData, post, processing, errors } = useForm({
         current_password: "",
         password: "",
         password_confirmation: "",
-
         _method: "PUT",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // kirim data ke route "settings"
         post("/profile/password", {
             preserveScroll: true,
             onSuccess: () => {
@@ -39,7 +36,7 @@ export default function ChangePassword() {
 
     return (
         <>
-            <Head title={`Change Password`} />
+            <Head title="Change Password" />
             <LayoutApp>
                 <PageHeader
                     title="Change Password"
