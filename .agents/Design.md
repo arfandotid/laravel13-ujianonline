@@ -8,12 +8,13 @@ This project uses **TailwindCSS v4** with **Shadcn UI** primitives and a custom 
 
 ## Typography
 
-| Usage | Font |
-|---|---|
-| UI / Body | Instrument Sans |
-| Fallback | ui-sans-serif, system-ui, sans-serif |
+| Usage     | Font                                 |
+| --------- | ------------------------------------ |
+| UI / Body | Instrument Sans                      |
+| Fallback  | ui-sans-serif, system-ui, sans-serif |
 
 Configured via `@theme` in `app.css`:
+
 ```css
 @theme {
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
@@ -27,6 +28,7 @@ Configured via `@theme` in `app.css`:
 Colors use **oklch** color space for better perceptual uniformity. Tokens are defined in `resources/css/app.css` and support **light/dark mode** via `.dark` class.
 
 Key tokens include:
+
 - `--background` / `--foreground`
 - `--primary` / `--primary-foreground`
 - `--secondary` / `--secondary-foreground`
@@ -46,6 +48,7 @@ Key tokens include:
 - Custom variant: `@custom-variant dark (&:is(.dark *))`.
 
 Components:
+
 - `resources/js/Components/theme/ThemeProvider.jsx`
 - `resources/js/Components/theme/ThemeToggle.jsx`
 
@@ -54,11 +57,13 @@ Components:
 ## Layout System
 
 ### Authenticated Layout (`LayoutApp`)
+
 - Fixed sidebar on the left (collapsible).
 - Header bar at the top with user menu and theme toggle.
 - Main content area scrollable on the right.
 
 ### Auth Layout (`LayoutAuth`)
+
 - Centered card layout for login/register pages.
 - Clean, minimal design.
 
@@ -67,7 +72,9 @@ Components:
 ## Component Library
 
 ### UI Primitives (`Components/ui/`)
+
 Shadcn UI components — do not modify directly. Include:
+
 - `Button`, `Input`, `Label`, `Textarea`
 - `Select`, `Checkbox`, `Switch`
 - `Dialog`, `Sheet`, `Dropdown`
@@ -76,27 +83,31 @@ Shadcn UI components — do not modify directly. Include:
 - `Tooltip`, `Popover`
 
 ### Common Page Components (`Components/common/`)
+
 Shared components used across pages:
 
-| Component | Purpose |
-|---|---|
-| `PageHeader` | Page title + action button (e.g., "Create") |
-| `Search` | Debounced search input |
-| `Delete` | SweetAlert2 confirmation + delete form |
-| `TablePagination` | Inertia-aware pagination links |
-| `TableEmpty` | Empty state row for tables |
+| Component         | Purpose                                     |
+| ----------------- | ------------------------------------------- |
+| `PageHeader`      | Page title + action button (e.g., "Create") |
+| `Search`          | Debounced search input                      |
+| `Delete`          | SweetAlert2 confirmation + delete form      |
+| `TablePagination` | Inertia-aware pagination links              |
+| `TableEmpty`      | Empty state row for tables                  |
 
 ### Form Components (`Components/form/`)
-| Component | Purpose |
-|---|---|
+
+| Component      | Purpose                         |
+| -------------- | ------------------------------- |
 | `StatusSelect` | Reusable active/inactive select |
 
 ### Table Components (`Components/table/`)
-| Component | Purpose |
-|---|---|
+
+| Component    | Purpose                             |
+| ------------ | ----------------------------------- |
 | `BasicTable` | Standard table with head/body slots |
 
 ### Sidebar (`Components/Sidebar/`)
+
 - `menuConfig.js` — defines navigation items with label, icon, route, and required permission.
 - Permission-aware: menu items hidden if user lacks the permission.
 
@@ -114,6 +125,7 @@ Pages/ResourceName/
 ```
 
 ### Index Page Pattern
+
 ```jsx
 // Props from controller
 const { data, filters, can } = usePage().props;
@@ -128,6 +140,7 @@ const { data, filters, can } = usePage().props;
 ```
 
 ### Create/Edit Page Pattern
+
 ```jsx
 const { data, setData, post/put, errors } = useForm({ ... });
 
@@ -158,7 +171,8 @@ const { data, setData, post/put, errors } = useForm({ ... });
 
 ## Icons
 
-Use `lucide-react` for all icons. Example:
+Use `lucide-react` for all icons. Don't use symbol (e.g. `+`, `-`, etc.) as icon name, but use the icon name from `lucide-react` (e.g. `Plus`, `Minus`, etc.). Example:
+
 ```jsx
-import { Users, Settings, Shield } from 'lucide-react';
+import { Users, Settings, Shield } from "lucide-react";
 ```

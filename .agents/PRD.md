@@ -1,108 +1,63 @@
-# Product Requirements Document (PRD)
+# PRD — Laravel CBT (Computer-Based Testing)
 
-## Product Overview
-
-**Name**: Laravel 13 + Inertia.js + React Admin Starter  
-**Type**: Web Application Boilerplate / Admin Panel  
-**Target Audience**: Developers building multi-role Laravel admin applications
-
----
+**Type**: Web-based online exam application · **Target**: Sekolah, lembaga pelatihan, organisasi
 
 ## Goals
 
-1. Provide a production-ready Laravel admin starter with authentication and role-based access control out of the box.
-2. Enable rapid feature development by following consistent CRUD patterns.
-3. Be easily understandable and extendable by both developers and AI agents.
+1. Platform ujian online dengan akses berbasis role (admin, participant).
+2. Bank soal reusable untuk pembuatan ujian cepat.
+3. Auto-grading pilihan ganda + dashboard peserta dengan timer real-time.
 
----
+## Core Features
 
-## Core Features (MVP)
+**Auth** — Login (email/username), logout, forgot password, remember me.
 
-### Authentication
-- [x] Login
-- [x] Logout
-- [x] Password reset (forgot password flow)
-- [x] Remember me
+**Master Data (Admin)** — CRUD Group, Subject, Question (multiple choice + opsi jawaban, atau essay), reusable across exams, search + pagination di semua list.
 
-### User Management
-- [x] List users (with search + pagination)
-- [x] Create user (assign roles, set status)
-- [x] Edit user (update info, avatar, roles)
-- [x] Delete user (with confirmation)
-- [x] Active / Inactive status toggle
+**Exam Management (Admin)**
 
-### Role Management
-- [x] List roles
-- [x] Create role (with permission assignment)
-- [x] Edit role (update permissions)
-- [x] Delete role
+- CRUD exam: subject, duration, pass threshold, shuffle questions/answers
+- Assign soal ke exam (dengan points & order per soal, dari `exam_question`)
 
-### Permission Management
-- [x] List permissions
-- [x] Create permission
-- [x] Edit permission
-- [x] Delete permission
+**Exam Scheduling (Admin)**
 
-### Profile
-- [x] View & edit own profile
-- [x] Upload avatar
-- [x] Change password
+- Assign satu atau lebih group ke exam, masing-masing dengan `start_time`/`end_time` sendiri (satu exam bisa dijadwalkan berbeda per group)
+- Lihat daftar jadwal per exam
 
-### Settings
-- [x] Update app name
-- [x] Upload app logo
+**Exam Taking (Participant)**
 
-### Dashboard
-- [x] Overview statistics
+- Dashboard: exam tersedia/mendatang/selesai (berdasarkan jadwal group-nya)
+- Mulai ujian (buat session) → hanya aktif dalam window jadwal group
+- Timer real-time, navigasi soal (grid bernomor), shuffle soal/jawaban sesuai setting exam
+- Auto-submit saat waktu habis, submit manual sebelum itu
+- Satu kali attempt, tidak ada retake
 
----
+**Results & Grading**
+
+- Auto-grading pilihan ganda, manual grading essay (admin)
+- Peserta lihat hasil sendiri, admin lihat semua hasil + detail
 
 ## Access Control
 
-All actions are protected by **Spatie laravel-permission**:
+Spatie `laravel-permission`, dua role:
 
-| Permission | Who can use it |
-|---|---|
-| `users.index` | List users |
-| `users.create` | Create users |
-| `users.edit` | Edit users |
-| `users.delete` | Delete users |
-| `roles.index` | List roles |
-| `roles.create` | Create roles |
-| `roles.edit` | Edit roles |
-| `roles.delete` | Delete roles |
-| `permissions.index` | List permissions |
-| `permissions.create` | Create permissions |
-| `permissions.edit` | Edit permissions |
-| `permissions.delete` | Delete permissions |
-| `settings.index` | View settings |
-| `settings.edit` | Edit settings |
+| Role          | Akses                                                                                                                        |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `admin`       | Semua permission (groups, subjects, exams, questions, results, settings, users, roles)                                       |
+| `participant` | Dashboard sendiri, ambil ujian yang dijadwalkan, lihat hasil sendiri (tanpa permission individual, gated by role middleware) |
 
----
+Permission mengikuti daftar yang sudah di-seed di schema (`groups.*`, `subjects.*`, `exams.*`, `questions.*`, `results.*`, `settings.*`, `users.*`, `roles.*`, `permissions.*` — 24 total).
 
 ## Non-Functional Requirements
 
-- **Performance**: Pages render fast via Inertia.js (no full page reloads after initial load).
-- **Security**: All routes authenticated. Permissions checked both server-side (middleware) and client-side (UI).
-- **Maintainability**: Consistent CRUD patterns across all modules for easy onboarding.
-- **Extensibility**: New modules can be added following the Architecture guide without touching existing code.
-- **Accessibility**: Use semantic HTML and Shadcn UI which follows WAI-ARIA standards.
+- Inertia.js untuk navigasi tanpa full reload
+- Timer ujian divalidasi di server saat submit, bukan hanya client
+- Pola CRUD konsisten di semua modul untuk maintainability
 
----
+## Future (Post-MVP)
 
-## Future Features (Post-MVP)
-
-- [ ] Multi-tenancy / organization support
-- [ ] Activity log / audit trail
-- [ ] Email notifications
-- [ ] Two-factor authentication (2FA)
-- [ ] API support (Laravel Sanctum)
-- [ ] Role-based dashboard (different views per role)
-- [ ] Export to CSV / Excel
-
----
+Upload gambar soal · random question selection dari bank · analitik ujian · bulk import soal (CSV/Excel) · anti-cheat (fullscreen, disable copy-paste) · multi-bahasa · export hasil PDF/Excel
 
 ## Out of Scope
 
-- Mobile app (this is a web-only admin panel)
-- Public-facing frontend (separate project)
+Live proctoring/webcam · real-time multiplayer exam · aplikasi mobile native
