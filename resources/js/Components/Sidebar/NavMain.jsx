@@ -28,7 +28,7 @@ import {
 import { participantMenuItems } from "./menuConfigParticipant";
 
 export function NavMain() {
-    const { auth, url } = usePage().props;
+    const { auth } = usePage().props;
     const filteredMenuItems = getFilteredMenuItems();
     const isParticipant = auth?.roles?.includes("participant");
     const currentUrl = usePage().url;
@@ -63,7 +63,7 @@ export function NavMain() {
                           const isDropdownActive =
                               item.dropdown &&
                               item.dropdown.some((subItem) =>
-                                  url.startsWith(subItem.href),
+                                  currentUrl.startsWith(subItem.href),
                               );
 
                           return (
@@ -99,7 +99,7 @@ export function NavMain() {
                                                               >
                                                                   <SidebarMenuSubButton
                                                                       asChild
-                                                                      isActive={url.startsWith(
+                                                                      isActive={currentUrl.startsWith(
                                                                           subItem.href,
                                                                       )}
                                                                   >
@@ -124,7 +124,7 @@ export function NavMain() {
                                       ) : (
                                           <SidebarMenuButton
                                               asChild
-                                              isActive={url.startsWith(
+                                              isActive={currentUrl.startsWith(
                                                   item.href,
                                               )}
                                           >
