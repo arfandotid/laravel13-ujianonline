@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Participant;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -98,5 +99,38 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
     Route::get('/results', [App\Http\Controllers\Admin\ResultController::class, 'index'])->name('admin.results.index');
     Route::get('/results/{result}', [App\Http\Controllers\Admin\ResultController::class, 'show'])->name('admin.results.show');
     Route::post('/results/{result}/grade-essay', [App\Http\Controllers\Admin\ResultController::class, 'gradeEssay'])->name('admin.results.grade-essay');
+});
+
+// ─── Participant Routes (no prefix) ─────────────────────────────────────────
+Route::group(['middleware' => ['auth', 'role:participant']], function () {
+    // Dashboard
+    Route::get('/dashboard', [Participant\DashboardController::class, 'index'])
+        ->name('participant.dashboard');
+
+    // Exam List & Detail
+    Route::get('/exams', [Participant\ExamController::class, 'index'])
+        ->name('participant.exams.index');
+    Route::get('/exams/{id}', [Participant\ExamController::class, 'show'])
+        ->name('participant.exams.show');
+
+    // Start an exam session
+    Route::post('/exams/{id}/start', [Participant\ExamSessionController::class, 'start'])
+        ->name('participant.exams.start');
+
+    // Exam session (taking exam)
+    Route::get('/sessions/{sessionId}', [Participant\ExamSessionController::class, 'show'])
+        ->name('participant.sessions.show');
+
+    // Auto-save a single answer
+    Route::patch('/sessions/{sessionId}/answer', [Participant\ExamSessionController::class, 'saveAnswer'])
+        ->name('participant.sessions.answer');
+
+    // Submit exam
+    Route::post('/sessions/{sessionId}/submit', [Participant\ExamSessionController::class, 'submit'])
+        ->name('participant.sessions.submit');
+
+    // Result page
+    Route::get('/sessions/{sessionId}/result', [Participant\ExamSessionController::class, 'result'])
+        ->name('participant.sessions.result');
 });
 

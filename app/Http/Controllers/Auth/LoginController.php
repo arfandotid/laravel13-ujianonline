@@ -40,6 +40,10 @@ class LoginController
                 ]);
             }
 
+            if (Auth::user()->hasRole('participant')) {
+                return redirect()->route('participant.dashboard');
+            }
+
             return redirect()->route('admin.dashboard');
         }
 
