@@ -6,6 +6,12 @@ import {
     Key,
     Shield,
     LayoutDashboard,
+    FileText,
+    Calendar,
+    Award,
+    BookOpen,
+    HelpCircle,
+    GraduationCap,
 } from "lucide-react";
 
 export const menuItems = [
@@ -41,7 +47,7 @@ export const menuItems = [
     },
     {
         name: "Master Data",
-        icon: Users,
+        icon: GraduationCap,
         permissions: ["groups.index", "subjects.index", "questions.index"],
         dropdown: [
             {
@@ -53,16 +59,41 @@ export const menuItems = [
             {
                 name: "Mata Pelajaran",
                 href: "/admin/subjects",
-                icon: Key,
+                icon: BookOpen,
                 permissions: ["subjects.index"],
             },
             {
                 name: "Bank Soal",
                 href: "/admin/questions",
-                icon: Shield,
+                icon: HelpCircle,
                 permissions: ["questions.index"],
             },
         ],
+    },
+    {
+        name: "Ujian",
+        icon: FileText,
+        permissions: ["exams.index"],
+        dropdown: [
+            {
+                name: "Kelola Ujian",
+                href: "/admin/exams",
+                icon: FileText,
+                permissions: ["exams.index"],
+            },
+            {
+                name: "Jadwal Ujian",
+                href: "/admin/schedules",
+                icon: Calendar,
+                permissions: ["exams.index"],
+            },
+        ],
+    },
+    {
+        name: "Hasil Ujian",
+        icon: Award,
+        href: "/admin/results",
+        permissions: ["results.index"],
     },
     {
         name: "Settings",

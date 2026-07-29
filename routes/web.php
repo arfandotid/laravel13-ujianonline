@@ -85,4 +85,18 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
 
     // route resource untuk question
     Route::resource('/questions', App\Http\Controllers\Admin\QuestionController::class)->names('admin.questions');
+
+    // route resource untuk exam
+    Route::get('/exams/{exam}/questions', [App\Http\Controllers\Admin\ExamController::class, 'questions'])->name('admin.exams.questions');
+    Route::post('/exams/{exam}/questions', [App\Http\Controllers\Admin\ExamController::class, 'syncQuestions'])->name('admin.exams.questions.sync');
+    Route::resource('/exams', App\Http\Controllers\Admin\ExamController::class)->names('admin.exams');
+
+    // route resource untuk exam schedule
+    Route::resource('/schedules', App\Http\Controllers\Admin\ExamScheduleController::class)->names('admin.schedules');
+
+    // route resource untuk results
+    Route::get('/results', [App\Http\Controllers\Admin\ResultController::class, 'index'])->name('admin.results.index');
+    Route::get('/results/{result}', [App\Http\Controllers\Admin\ResultController::class, 'show'])->name('admin.results.show');
+    Route::post('/results/{result}/grade-essay', [App\Http\Controllers\Admin\ResultController::class, 'gradeEssay'])->name('admin.results.grade-essay');
 });
+

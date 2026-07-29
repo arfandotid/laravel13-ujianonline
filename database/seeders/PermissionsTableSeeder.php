@@ -51,5 +51,15 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'subjects.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'subjects.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'subjects.delete', 'guard_name' => 'web']);
+
+        //permission exams
+        Permission::create(['name' => 'exams.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'exams.create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'exams.edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'exams.delete', 'guard_name' => 'web']);
+
+        //permission results
+        Permission::create(['name' => 'results.index', 'guard_name' => 'web']);
+        Permission::create(['name' => 'results.show', 'guard_name' => 'web']);
     }
 }

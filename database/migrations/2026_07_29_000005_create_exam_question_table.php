@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('question_id')->constrained('questions')->cascadeOnDelete();
             $table->integer('points')->default(0);
             $table->integer('order')->default(0);
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
 
             // Satu soal tidak bisa ke-assign dua kali ke ujian yang sama
             $table->unique(['exam_id', 'question_id']);
