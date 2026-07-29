@@ -82,6 +82,8 @@ Shadcn UI components — do not modify directly. Include:
 - `Card`, `Table`
 - `Tooltip`, `Popover`
 
+install new component if needed from shadcn
+
 ### Common Page Components (`Components/common/`)
 
 Shared components used across pages:
