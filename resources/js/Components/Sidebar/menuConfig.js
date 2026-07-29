@@ -40,6 +40,31 @@ export const menuItems = [
         ],
     },
     {
+        name: "Master Data",
+        icon: Users,
+        permissions: ["groups.index", "subjects.index", "questions.index"],
+        dropdown: [
+            {
+                name: "Group Rombel",
+                href: "/admin/groups",
+                icon: Users,
+                permissions: ["groups.index"],
+            },
+            {
+                name: "Mata Pelajaran",
+                href: "/admin/subjects",
+                icon: Key,
+                permissions: ["subjects.index"],
+            },
+            {
+                name: "Bank Soal",
+                href: "/admin/questions",
+                icon: Shield,
+                permissions: ["questions.index"],
+            },
+        ],
+    },
+    {
         name: "Settings",
         icon: Settings,
         href: "/admin/settings",
