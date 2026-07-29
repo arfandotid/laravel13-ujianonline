@@ -14,10 +14,12 @@ import {
     BookOpen,
     CheckCircle2,
 } from "lucide-react";
+import { ThemeToggle } from "@/Components/theme/ThemeToggle";
 
 // ─── Timer countdown ─────────────────────────────────────────────────────────
 function useCountdown(initialSeconds, onExpire) {
-    const [seconds, setSeconds] = useState(initialSeconds);
+    // Gunakan Math.floor di sini agar state seconds tersimpan sebagai integer
+    const [seconds, setSeconds] = useState(() => Math.floor(initialSeconds || 0));
     const expiredRef = useRef(false);
 
     useEffect(() => {
@@ -35,13 +37,20 @@ function useCountdown(initialSeconds, onExpire) {
 }
 
 function formatTime(totalSeconds) {
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    if (h > 0) {
-        return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-    }
-    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    // 1. Bulatkan detik agar angka di belakang koma hilang
+    const totalSecs = Math.floor(totalSeconds || 0);
+
+    // 2. Hitung Jam, Menit, dan Detik
+    const h = Math.floor(totalSecs / 3600);
+    const m = Math.floor((totalSecs % 3600) / 60);
+    const s = totalSecs % 60;
+
+    // 3. Format dengan padStart agar selalu 2 digit (misal: 00.59.29)
+    const hh = String(h).padStart(2, "0");
+    const mm = String(m).padStart(2, "0");
+    const ss = String(s).padStart(2, "0");
+
+    return `${hh}.${mm}.${ss}`;
 }
 
 // ─── Question Navigator ───────────────────────────────────────────────────────
@@ -206,7 +215,7 @@ export default function SessionShow({
                                 <Timer className="size-4" />
                                 {formatTime(secondsLeft)}
                             </div>
-
+                            <ThemeToggle />
                             <Button
                                 size="sm"
                                 onClick={handleSubmit}

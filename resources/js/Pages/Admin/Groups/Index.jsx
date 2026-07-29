@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import hasAnyPermission from "@/utils/permissions";
-import { Edit } from "lucide-react";
+import { Edit, Users } from "lucide-react";
 import PageHeader from "@/Components/common/PageHeader";
 import TableEmpty from "@/Components/common/TableEmpty";
 import Search from "@/Components/common/Search";
@@ -89,6 +89,21 @@ export default function GroupsIndex() {
                                                             size="icon"
                                                         >
                                                             <Edit />
+                                                        </Button>
+                                                    </Link>
+                                                )}
+                                                {hasAnyPermission([
+                                                    "groups.members",
+                                                ]) && (
+                                                    <Link
+                                                        href={`/admin/groups/${group.id}/members`}
+                                                        title="Anggota"
+                                                    >
+                                                        <Button
+                                                            variant="outline"
+                                                            size="icon"
+                                                        >
+                                                            <Users />
                                                         </Button>
                                                     </Link>
                                                 )}

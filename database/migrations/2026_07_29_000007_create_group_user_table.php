@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             // Satu peserta tidak bisa duplikat di group yang sama
             $table->unique(['group_id', 'user_id']);
