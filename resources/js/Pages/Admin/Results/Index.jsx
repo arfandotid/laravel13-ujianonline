@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage, router } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import hasAnyPermission from "@/utils/permissions";
 import { Eye } from "lucide-react";
@@ -16,9 +16,34 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import ExamSelect from "@/Components/form/ExamSelect";
+import GroupSelect from "@/Components/form/GroupSelect";
 
 export default function ResultsIndex() {
-    const { results } = usePage().props;
+    const { results, exams, groups } = usePage().props;
+
+    const selectedExam = new URLSearchParams(window.location.search).get("exam_id") || "";
+    const selectedGroup = new URLSearchParams(window.location.search).get("group_id") || "";
+
+    const handleFilterExam = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("exam_id", val);
+        } else {
+            queryParams.delete("exam_id");
+        }
+        router.get(`/admin/results?${queryParams.toString()}`);
+    };
+
+    const handleFilterGroup = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("group_id", val);
+        } else {
+            queryParams.delete("group_id");
+        }
+        router.get(`/admin/results?${queryParams.toString()}`);
+    };
 
     const formatDate = (dateString) => {
         if (!dateString) return "-";
@@ -64,7 +89,33 @@ export default function ResultsIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/results" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/results" />
+                        </div>
+                        <div className="flex w-full sm:w-1/2 items-center gap-2">
+                            {exams && exams.length > 0 && (
+                                <div className="w-1/2">
+                                    <ExamSelect
+                                        exams={exams}
+                                        value={selectedExam}
+                                        onChange={handleFilterExam}
+                                        placeholder="Semua Ujian"
+                                    />
+                                </div>
+                            )}
+                            {groups && groups.length > 0 && (
+                                <div className="w-1/2">
+                                    <GroupSelect
+                                        groups={groups}
+                                        value={selectedGroup}
+                                        onChange={handleFilterGroup}
+                                        placeholder="Semua Grup"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
                     <Table>
                         <TableHeader>

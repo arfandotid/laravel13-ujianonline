@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage, router } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import hasAnyPermission from "@/utils/permissions";
 import { Edit } from "lucide-react";
@@ -17,9 +17,34 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import SubjectSelect from "@/Components/form/SubjectSelect";
+import GroupSelect from "@/Components/form/GroupSelect";
 
 export default function ExamSchedulesIndex() {
-    const { schedules } = usePage().props;
+    const { schedules, subjects, groups } = usePage().props;
+
+    const selectedSubject = new URLSearchParams(window.location.search).get("subject_id") || "";
+    const selectedGroup = new URLSearchParams(window.location.search).get("group_id") || "";
+
+    const handleFilterSubject = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("subject_id", val);
+        } else {
+            queryParams.delete("subject_id");
+        }
+        router.get(`/admin/schedules?${queryParams.toString()}`);
+    };
+
+    const handleFilterGroup = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("group_id", val);
+        } else {
+            queryParams.delete("group_id");
+        }
+        router.get(`/admin/schedules?${queryParams.toString()}`);
+    };
 
     const formatDate = (dateString) => {
         if (!dateString) return "-";
@@ -44,7 +69,33 @@ export default function ExamSchedulesIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/schedules" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/schedules" />
+                        </div>
+                        <div className="flex w-full sm:w-1/2 items-center gap-2">
+                            {subjects && subjects.length > 0 && (
+                                <div className="w-1/2">
+                                    <SubjectSelect
+                                        subjects={subjects}
+                                        value={selectedSubject}
+                                        onChange={handleFilterSubject}
+                                        placeholder="Semua Mata Pelajaran"
+                                    />
+                                </div>
+                            )}
+                            {groups && groups.length > 0 && (
+                                <div className="w-1/2">
+                                    <GroupSelect
+                                        groups={groups}
+                                        value={selectedGroup}
+                                        onChange={handleFilterGroup}
+                                        placeholder="Semua Grup"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
                     <Table>
                         <TableHeader>

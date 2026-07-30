@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Exam;
 use App\Models\ExamSession;
+use App\Models\Group;
 use App\Models\ParticipantAnswer;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -34,11 +36,20 @@ class ResultController implements HasMiddleware
                     $q->where('title', 'like', '%' . request()->q . '%');
                 });
             })
+            ->when(request()->exam_id, function ($query) {
+                $query->where('exam_id', request()->exam_id);
+            })
+            ->when(request()->group_id, function ($query) {
+                $query->whereHas('examSchedule', fn($q) => $q->where('group_id', request()->group_id));
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Admin/Results/Index', compact('results'));
+        $exams = Exam::select('id', 'title')->orderBy('title')->get();
+        $groups = Group::where('is_active', true)->select('id', 'name')->get();
+
+        return Inertia::render('Admin/Results/Index', compact('results', 'exams', 'groups'));
     }
 
     public function show(int|string $id): Response

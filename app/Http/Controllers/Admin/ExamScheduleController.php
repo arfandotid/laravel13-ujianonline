@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\ExamSchedule;
 use App\Models\Exam;
 use App\Models\Group;
+use App\Models\Subject;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -36,11 +37,20 @@ class ExamScheduleController implements HasMiddleware
                     $q->where('name', 'like', '%' . request()->q . '%');
                 });
             })
+            ->when(request()->subject_id, function ($query) {
+                $query->whereHas('exam', fn($q) => $q->where('subject_id', request()->subject_id));
+            })
+            ->when(request()->group_id, function ($query) {
+                $query->where('group_id', request()->group_id);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Admin/ExamSchedules/Index', compact('schedules'));
+        $subjects = Subject::select('id', 'name')->orderBy('name')->get();
+        $groups = Group::where('is_active', true)->select('id', 'name')->get();
+
+        return Inertia::render('Admin/ExamSchedules/Index', compact('schedules', 'subjects', 'groups'));
     }
 
     public function create(): Response
