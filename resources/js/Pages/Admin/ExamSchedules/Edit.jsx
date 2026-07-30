@@ -6,6 +6,8 @@ import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
+import ExamSelect from "@/Components/form/ExamSelect";
+import GroupSelect from "@/Components/form/GroupSelect";
 
 export default function ExamSchedulesEdit() {
     const { schedule, exams, groups } = usePage().props;
@@ -53,21 +55,12 @@ export default function ExamSchedulesEdit() {
                     <div className="space-y-5">
                         <Field>
                             <FieldLabel>Pilih Ujian</FieldLabel>
-                            <select
+                            <ExamSelect
+                                exams={exams}
                                 value={data.exam_id}
-                                onChange={(e) => setData("exam_id", e.target.value)}
-                                className={`w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
-                                    errors.exam_id ? "border-red-500" : ""
-                                }`}
-                            >
-                                <option value="">-- Pilih Ujian --</option>
-                                {exams &&
-                                    exams.map((ex) => (
-                                        <option key={ex.id} value={ex.id}>
-                                            {ex.title}
-                                        </option>
-                                    ))}
-                            </select>
+                                onChange={(val) => setData("exam_id", val)}
+                                placeholder="-- Pilih Ujian --"
+                            />
                             {errors.exam_id && (
                                 <FieldDescription className="mt-1 text-sm text-red-600">
                                     {errors.exam_id}
@@ -77,21 +70,12 @@ export default function ExamSchedulesEdit() {
 
                         <Field>
                             <FieldLabel>Pilih Group / Rombel</FieldLabel>
-                            <select
+                            <GroupSelect
+                                groups={groups}
                                 value={data.group_id}
-                                onChange={(e) => setData("group_id", e.target.value)}
-                                className={`w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
-                                    errors.group_id ? "border-red-500" : ""
-                                }`}
-                            >
-                                <option value="">-- Pilih Group --</option>
-                                {groups &&
-                                    groups.map((g) => (
-                                        <option key={g.id} value={g.id}>
-                                            {g.name}
-                                        </option>
-                                    ))}
-                            </select>
+                                onChange={(val) => setData("group_id", val)}
+                                placeholder="-- Pilih Group --"
+                            />
                             {errors.group_id && (
                                 <FieldDescription className="mt-1 text-sm text-red-600">
                                     {errors.group_id}
