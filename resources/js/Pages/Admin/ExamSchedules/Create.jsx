@@ -8,6 +8,7 @@ import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
 import ExamSelect from "@/Components/form/ExamSelect";
 import GroupSelect from "@/Components/form/GroupSelect";
+import DateTimePicker from "@/Components/form/DateTimePicker";
 
 export default function ExamSchedulesCreate() {
     const { exams, groups } = usePage().props;
@@ -66,18 +67,13 @@ export default function ExamSchedulesCreate() {
                             )}
                         </Field>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <Field>
                                 <FieldLabel>Waktu Mulai</FieldLabel>
-                                <Input
-                                    type="datetime-local"
+                                 <DateTimePicker
                                     value={data.start_time}
-                                    onChange={(e) =>
-                                        setData("start_time", e.target.value)
-                                    }
-                                    className={`${
-                                        errors.start_time ? "border-red-500" : ""
-                                    }`}
+                                    onChange={(val) => setData("start_time", val)}
+                                    placeholder="Pilih tanggal & waktu mulai"
                                 />
                                 {errors.start_time && (
                                     <FieldDescription className="mt-1 text-sm text-red-600">
@@ -88,15 +84,10 @@ export default function ExamSchedulesCreate() {
 
                             <Field>
                                 <FieldLabel>Waktu Selesai</FieldLabel>
-                                <Input
-                                    type="datetime-local"
+                                <DateTimePicker
                                     value={data.end_time}
-                                    onChange={(e) =>
-                                        setData("end_time", e.target.value)
-                                    }
-                                    className={`${
-                                        errors.end_time ? "border-red-500" : ""
-                                    }`}
+                                    onChange={(val) => setData("end_time", val)}
+                                    placeholder="Pilih tanggal & waktu selesai"
                                 />
                                 {errors.end_time && (
                                     <FieldDescription className="mt-1 text-sm text-red-600">
