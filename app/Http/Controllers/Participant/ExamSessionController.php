@@ -21,7 +21,7 @@ class ExamSessionController
     public function start(int|string $id): RedirectResponse
     {
         $user = Auth::user();
-        $groupIds = $user->groups()->pluck('groups.id');
+        $groupIds = $user->group_id ? [$user->group_id] : [];
         $now = now();
 
         // Find the schedule for this exam belonging to user's group

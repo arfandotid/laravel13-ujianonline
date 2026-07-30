@@ -39,7 +39,6 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'groups.create', 'guard_name' => 'web']);
         Permission::create(['name' => 'groups.edit', 'guard_name' => 'web']);
         Permission::create(['name' => 'groups.delete', 'guard_name' => 'web']);
-        Permission::create(['name' => 'groups.members', 'guard_name' => 'web']);
 
         //permission questions
         Permission::create(['name' => 'questions.index', 'guard_name' => 'web']);

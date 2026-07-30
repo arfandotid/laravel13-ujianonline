@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Group;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -31,7 +32,7 @@ class UserController implements HasMiddleware
     public function index(): Response
     {
         $users = User::query()
-            ->with('roles:id,name')
+            ->with('roles:id,name', 'group:id,name')
             ->when(request()->q, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . request()->q . '%')
@@ -48,7 +49,8 @@ class UserController implements HasMiddleware
     public function create(): Response
     {
         $roles = Role::select('id', 'name')->orderBy('name')->get();
-        return Inertia::render('Admin/Users/Create', compact('roles'));
+        $groups = Group::where('is_active', true)->select('id', 'name')->get();
+        return Inertia::render('Admin/Users/Create', compact('roles', 'groups'));
     }
 
     public function store(StoreUserRequest $request): RedirectResponse
@@ -59,6 +61,7 @@ class UserController implements HasMiddleware
             'username'  => $request->username,
             'password'  => Hash::make($request->password),
             'is_active' => $request->is_active,
+            'group_id'  => $request->group_id,
         ];
 
         if ($request->hasFile('avatar')) {
@@ -75,11 +78,12 @@ class UserController implements HasMiddleware
 
     public function edit(int|string $id): Response
     {
-        $user = User::with('roles')->findOrFail($id);
+        $user = User::with('roles', 'group:id,name')->findOrFail($id);
         $roles = Role::select('id', 'name')->orderBy('name')->get();
+        $groups = Group::where('is_active', true)->select('id', 'name')->get();
         $userRoles = $user->roles->pluck('id');
 
-        return Inertia::render('Admin/Users/Edit', compact('user', 'roles', 'userRoles'));
+        return Inertia::render('Admin/Users/Edit', compact('user', 'roles', 'groups', 'userRoles'));
     }
 
     public function update(UpdateUserRequest $request, int|string $id): RedirectResponse
@@ -91,6 +95,7 @@ class UserController implements HasMiddleware
             'email'     => $request->email,
             'username'  => $request->username,
             'is_active' => $request->is_active,
+            'group_id'  => $request->group_id,
         ];
 
         if ($request->hasFile('avatar')) {

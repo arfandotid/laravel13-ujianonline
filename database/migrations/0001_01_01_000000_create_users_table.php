@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('avatar')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->foreignId('group_id')->nullable()->constrained('groups')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -45,6 +46,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['group_id']);
+            $table->dropColumn('group_id');
+        });
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

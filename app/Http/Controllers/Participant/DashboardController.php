@@ -15,7 +15,7 @@ class DashboardController
         $user = Auth::user();
 
         // Get all group IDs for this participant
-        $groupIds = $user->groups()->pluck('groups.id');
+        $groupIds = $user->group_id ? [$user->group_id] : [];
 
         // All schedules accessible by this user's groups
         $schedules = ExamSchedule::with(['exam.subject'])

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
@@ -22,12 +21,11 @@ class Group extends Model
     }
 
     /**
-     * Group has many members (Users) via pivot.
+     * Group has many members (Users).
      */
-    public function users(): BelongsToMany
+    public function users(): HasMany
     {
-        return $this->belongsToMany(User::class, 'group_user')
-                    ->withTimestamps();
+        return $this->hasMany(User::class);
     }
 
     /**

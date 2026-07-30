@@ -14,7 +14,7 @@ class ExamController
     public function index(): Response
     {
         $user = Auth::user();
-        $groupIds = $user->groups()->pluck('groups.id');
+        $groupIds = $user->group_id ? [$user->group_id] : [];
         $now = now();
 
         $schedules = ExamSchedule::with(['exam.subject'])
@@ -66,7 +66,7 @@ class ExamController
     public function show(int|string $id): Response
     {
         $user = Auth::user();
-        $groupIds = $user->groups()->pluck('groups.id');
+        $groupIds = $user->group_id ? [$user->group_id] : [];
         $now = now();
 
         // Find schedule for this exam that belongs to user's group

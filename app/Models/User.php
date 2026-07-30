@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'avatar',
         'is_active',
+        'group_id',
     ];
 
     /**
@@ -63,12 +64,11 @@ class User extends Authenticatable
     }
 
     /**
-     * User belongs to many Groups.
+     * User belongs to a Group.
      */
-    public function groups(): BelongsToMany
+    public function group(): BelongsTo
     {
-        return $this->belongsToMany(Group::class, 'group_user')
-                    ->withTimestamps();
+        return $this->belongsTo(Group::class);
     }
 
     /**

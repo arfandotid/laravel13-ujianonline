@@ -81,10 +81,6 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
     // route resource untuk group
     Route::resource('/groups', App\Http\Controllers\Admin\GroupController::class)->names('admin.groups');
 
-    // route manage members group
-    Route::get('/groups/{group}/members', [App\Http\Controllers\Admin\GroupController::class, 'members'])->name('admin.groups.members');
-    Route::post('/groups/{group}/members', [App\Http\Controllers\Admin\GroupController::class, 'syncMembers'])->name('admin.groups.members.sync');
-
     // route resource untuk subject
     Route::resource('/subjects', App\Http\Controllers\Admin\SubjectController::class)->names('admin.subjects');
 

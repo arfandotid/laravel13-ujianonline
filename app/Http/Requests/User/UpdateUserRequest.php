@@ -23,6 +23,7 @@ class UpdateUserRequest extends FormRequest
             'roles'     => 'required|array',
             'roles.*'   => 'exists:roles,id',
             'is_active' => 'required',
+            'group_id'  => ['nullable', 'integer', 'exists:groups,id'],
             'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }

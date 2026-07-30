@@ -7,9 +7,10 @@ import { Input } from "@/Components/ui/input";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
+import GroupSelect from "@/Components/form/GroupSelect";
 
 export default function UsersCreate() {
-    const { roles } = usePage().props;
+    const { roles, groups } = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         name: "",
@@ -19,6 +20,7 @@ export default function UsersCreate() {
         roles: [],
         avatar: null,
         is_active: "1",
+        group_id: "",
     });
 
     const toggleRole = (id) => {
@@ -151,6 +153,15 @@ export default function UsersCreate() {
                                     {errors.avatar}
                                 </FieldDescription>
                             )}
+                        </Field>
+                        <Field>
+                            <FieldLabel>Grup</FieldLabel>
+                            <GroupSelect
+                                groups={groups}
+                                value={data.group_id}
+                                onChange={(val) => setData("group_id", val)}
+                                placeholder="Pilih grup"
+                            />
                         </Field>
                         <Field>
                             <FieldLabel>Status</FieldLabel>

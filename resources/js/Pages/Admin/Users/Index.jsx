@@ -48,6 +48,7 @@ export default function UsersIndex() {
                                 <TableHead>Email</TableHead>
                                 <TableHead>Username</TableHead>
                                 <TableHead>Role</TableHead>
+                                <TableHead>Group</TableHead>
                                 <TableHead>Status</TableHead>
                                 <TableHead className="w-7">Aksi</TableHead>
                             </TableRow>
@@ -83,6 +84,9 @@ export default function UsersIndex() {
                                                       .map((role) => role.name)
                                                       .join(", ")
                                                 : "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            {user.group?.name || "-"}
                                         </TableCell>
                                         <TableCell>
                                             {user.is_active == "1" ? (
@@ -134,7 +138,7 @@ export default function UsersIndex() {
                                 <TableEmpty
                                     title="Tidak ada User"
                                     description="Silahkan tambahkan user baru"
-                                    colSpan={8}
+                                    colSpan={9}
                                 />
                             )}
                         </TableBody>

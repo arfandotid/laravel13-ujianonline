@@ -8,11 +8,12 @@ import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
+import GroupSelect from "@/Components/form/GroupSelect";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { APP_URL } from "@/constants/app";
 
 export default function UsersEdit() {
-    const { user, roles, userRoles } = usePage().props;
+    const { user, roles, groups, userRoles } = usePage().props;
 
     const { data, setData, put, processing, errors } = useForm({
         name: user.name || "",
@@ -22,6 +23,7 @@ export default function UsersEdit() {
         roles: userRoles || [],
         is_active: user.is_active,
         avatar: null,
+        group_id: user.group_id ?? "",
     });
 
     const toggleRole = (id) => {
@@ -203,6 +205,15 @@ export default function UsersEdit() {
                             )}
                         </Field>
 
+                        <Field>
+                            <FieldLabel>Grup</FieldLabel>
+                            <GroupSelect
+                                groups={groups}
+                                value={data.group_id}
+                                onChange={(val) => setData("group_id", val)}
+                                placeholder="Pilih grup"
+                            />
+                        </Field>
                         <Field>
                             <FieldLabel>Status</FieldLabel>
                             <StatusSelect
