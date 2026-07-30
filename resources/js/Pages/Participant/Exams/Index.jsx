@@ -38,7 +38,7 @@ function ExamCard({ exam }) {
     const cfg = STATUS_CONFIG[exam.status] ?? {};
 
     return (
-        <Card className="border-border/50 bg-card/60 backdrop-blur-sm transition-all hover:border-border hover:shadow-md">
+        <Card className="border-border/50 bg-card/60 backdrop-blur-sm transition-all hover:border-border hover:shadow-md shadow-none">
             <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">

@@ -232,7 +232,7 @@ export default function SessionResult({ session, exam, results }) {
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Score panel */}
                     <div className="space-y-4 lg:col-span-1">
-                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm">
+                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm shadow-none">
                             <CardContent className="flex flex-col items-center gap-4 p-6">
                                 <ScoreRing
                                     score={session.score ?? 0}
@@ -302,7 +302,7 @@ export default function SessionResult({ session, exam, results }) {
 
                     {/* Answer review */}
                     <div className="lg:col-span-2">
-                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm">
+                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm shadow-none">
                             <CardHeader className="pb-3">
                                 <CardTitle className="flex items-center gap-2 text-base">
                                     <BookOpen className="size-4 text-primary" />

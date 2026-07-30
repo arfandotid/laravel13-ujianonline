@@ -63,7 +63,7 @@ export default function ExamShow({ schedule, exam, status, session_id }) {
 
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Main info */}
-                    <Card className="border-border/50 bg-card/60 backdrop-blur-sm lg:col-span-2">
+                    <Card className="border-border/50 bg-card/60 backdrop-blur-sm lg:col-span-2 shadow-none">
                         <CardHeader className="pb-2">
                             <div className="flex items-center gap-2">
                                 <CardTitle className="text-base">
@@ -142,7 +142,7 @@ export default function ExamShow({ schedule, exam, status, session_id }) {
 
                     {/* Action panel */}
                     <div className="space-y-4">
-                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm">
+                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm shadow-none">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-base">Aksi</CardTitle>
                             </CardHeader>

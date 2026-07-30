@@ -31,7 +31,7 @@ function StatusBadge({ status }) {
 
 function StatCard({ icon: Icon, label, value, color }) {
     return (
-        <Card className="border-border/50 bg-card/60 backdrop-blur-sm">
+        <Card className="border-border/50 bg-card/60 backdrop-blur-sm shadow-none">
             <CardContent className="flex items-center gap-4 p-6">
                 <div className={`rounded-xl p-3 ${color}`}>
                     <Icon className="size-6" />
@@ -79,7 +79,7 @@ export default function Dashboard({ stats, upcomingExams }) {
                 </div>
 
                 {/* Upcoming Exams */}
-                <Card className="border-border/50 bg-card/60 backdrop-blur-sm">
+                <Card className="border-border/50 bg-card/60 backdrop-blur-sm shadow-none">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <CardTitle className="flex items-center gap-2 text-base font-semibold">
                             <BookOpen className="size-4 text-primary" />
