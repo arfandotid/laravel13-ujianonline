@@ -16,16 +16,16 @@ import {
 } from "@/Components/ui/command";
 import { cn } from "@/lib/utils";
 
-export default function GroupSelect({
+export default function SubjectSelect({
     value = "",
     onChange,
-    groups = [],
-    placeholder = "Pilih grup",
+    subjects = [],
+    placeholder = "Pilih mata pelajaran",
     className = "",
 }) {
     const [open, setOpen] = useState(false);
 
-    const selected = groups.find((g) => String(g.id) === String(value));
+    const selected = subjects.find((s) => String(s.id) === String(value));
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -55,17 +55,17 @@ export default function GroupSelect({
             </PopoverTrigger>
             <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                 <Command>
-                    <CommandInput placeholder="Cari grup..." />
+                    <CommandInput placeholder="Cari mata pelajaran..." />
                     <CommandList>
-                        <CommandEmpty>Grup tidak ditemukan</CommandEmpty>
+                        <CommandEmpty>Mata pelajaran tidak ditemukan</CommandEmpty>
                         <CommandGroup>
-                            {groups.map((g) => (
+                            {subjects.map((s) => (
                                 <CommandItem
-                                    key={g.id}
-                                    value={g.name}
+                                    key={s.id}
+                                    value={s.name}
                                     onSelect={() => {
                                         onChange(
-                                            String(g.id) === String(value) ? "" : g.id,
+                                            String(s.id) === String(value) ? "" : s.id,
                                         );
                                         setOpen(false);
                                     }}
@@ -73,12 +73,12 @@ export default function GroupSelect({
                                     <Check
                                         className={cn(
                                             "mr-2 size-4",
-                                            String(g.id) === String(value)
+                                            String(s.id) === String(value)
                                                 ? "opacity-100"
                                                 : "opacity-0",
                                         )}
                                     />
-                                    {g.name}
+                                    {s.name}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

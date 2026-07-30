@@ -7,6 +7,7 @@ import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
+import SubjectSelect from "@/Components/form/SubjectSelect";
 
 export default function QuestionsEdit() {
     const { question, subjects } = usePage().props;
@@ -74,21 +75,12 @@ export default function QuestionsEdit() {
                     <div className="space-y-5">
                         <Field>
                             <FieldLabel>Mata Pelajaran</FieldLabel>
-                            <select
-                                className={`flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm ${
-                                    errors.subject_id ? "border-red-500" : ""
-                                }`}
+                            <SubjectSelect
+                                subjects={subjects}
                                 value={data.subject_id}
-                                onChange={(e) => setData("subject_id", e.target.value)}
-                            >
-                                <option value="">-- Pilih Mata Pelajaran --</option>
-                                {subjects &&
-                                    subjects.map((s) => (
-                                        <option key={s.id} value={s.id}>
-                                            {s.name}
-                                        </option>
-                                    ))}
-                            </select>
+                                onChange={(val) => setData("subject_id", val)}
+                                placeholder="-- Pilih Mata Pelajaran --"
+                            />
                             {errors.subject_id && (
                                 <FieldDescription className="mt-1 text-sm text-red-600">
                                     {errors.subject_id}

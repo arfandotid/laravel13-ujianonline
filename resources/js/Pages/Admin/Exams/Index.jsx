@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage, router } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import hasAnyPermission from "@/utils/permissions";
 import { Edit, HelpCircle, Calendar } from "lucide-react";
@@ -17,9 +17,22 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import SubjectSelect from "@/Components/form/SubjectSelect";
 
 export default function ExamsIndex() {
-    const { exams } = usePage().props;
+    const { exams, subjects } = usePage().props;
+
+    const selectedSubject = new URLSearchParams(window.location.search).get("subject_id") || "";
+
+    const handleFilterSubject = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("subject_id", val);
+        } else {
+            queryParams.delete("subject_id");
+        }
+        router.get(`/admin/exams?${queryParams.toString()}`);
+    };
 
     return (
         <>
@@ -35,7 +48,21 @@ export default function ExamsIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/exams" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/exams" />
+                        </div>
+                        {subjects && subjects.length > 0 && (
+                            <div className="w-full sm:w-1/3">
+                                <SubjectSelect
+                                    subjects={subjects}
+                                    value={selectedSubject}
+                                    onChange={handleFilterSubject}
+                                    placeholder="Semua Mata Pelajaran"
+                                />
+                            </div>
+                        )}
+                    </div>
 
                     <Table>
                         <TableHeader>

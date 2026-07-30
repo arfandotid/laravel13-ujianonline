@@ -17,15 +17,17 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import SubjectSelect from "@/Components/form/SubjectSelect";
 
 export default function QuestionsIndex() {
     const { questions, subjects } = usePage().props;
 
-    const handleFilterSubject = (e) => {
-        const value = e.target.value;
+    const selectedSubject = new URLSearchParams(window.location.search).get("subject_id") || "";
+
+    const handleFilterSubject = (val) => {
         const queryParams = new URLSearchParams(window.location.search);
-        if (value) {
-            queryParams.set("subject_id", value);
+        if (val) {
+            queryParams.set("subject_id", val);
         } else {
             queryParams.delete("subject_id");
         }
@@ -50,20 +52,16 @@ export default function QuestionsIndex() {
                         <div className="w-full sm:w-1/2">
                             <Search URL="/admin/questions" />
                         </div>
-                        <div className="w-full sm:w-1/3">
-                            <select
-                                className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
-                                onChange={handleFilterSubject}
-                                defaultValue={new URLSearchParams(window.location.search).get("subject_id") || ""}
-                            >
-                                <option value="">Semua Mata Pelajaran</option>
-                                {subjects && subjects.map((subj) => (
-                                    <option key={subj.id} value={subj.id}>
-                                        {subj.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        {subjects && subjects.length > 0 && (
+                            <div className="w-full sm:w-1/3">
+                                <SubjectSelect
+                                    subjects={subjects}
+                                    value={selectedSubject}
+                                    onChange={handleFilterSubject}
+                                    placeholder="Semua Mata Pelajaran"
+                                />
+                            </div>
+                        )}
                     </div>
 
                     <Table>

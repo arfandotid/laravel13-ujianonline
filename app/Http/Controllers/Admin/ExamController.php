@@ -28,6 +28,8 @@ class ExamController implements HasMiddleware
 
     public function index(): Response
     {
+        $subjects = Subject::where('is_active', true)->select('id', 'name')->get();
+
         $exams = Exam::query()
             ->with(['subject'])
             ->withCount('questions')
@@ -37,11 +39,14 @@ class ExamController implements HasMiddleware
                           $q->where('name', 'like', '%' . request()->q . '%');
                       });
             })
+            ->when(request()->subject_id, function ($query) {
+                $query->where('subject_id', request()->subject_id);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Admin/Exams/Index', compact('exams'));
+        return Inertia::render('Admin/Exams/Index', compact('exams', 'subjects'));
     }
 
     public function create(): Response

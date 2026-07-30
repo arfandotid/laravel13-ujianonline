@@ -7,6 +7,7 @@ import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Button } from "@/Components/ui/button";
 import StatusSelect from "@/Components/form/StatusSelect";
+import SubjectSelect from "@/Components/form/SubjectSelect";
 
 export default function ExamsCreate() {
     const { subjects } = usePage().props;
@@ -40,21 +41,12 @@ export default function ExamsCreate() {
                     <div className="space-y-5">
                         <Field>
                             <FieldLabel>Mata Pelajaran</FieldLabel>
-                            <select
+                            <SubjectSelect
+                                subjects={subjects}
                                 value={data.subject_id}
-                                onChange={(e) => setData("subject_id", e.target.value)}
-                                className={`w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring ${
-                                    errors.subject_id ? "border-red-500" : ""
-                                }`}
-                            >
-                                <option value="">-- Pilih Mata Pelajaran --</option>
-                                {subjects &&
-                                    subjects.map((sub) => (
-                                        <option key={sub.id} value={sub.id}>
-                                            {sub.name}
-                                        </option>
-                                    ))}
-                            </select>
+                                onChange={(val) => setData("subject_id", val)}
+                                placeholder="-- Pilih Mata Pelajaran --"
+                            />
                             {errors.subject_id && (
                                 <FieldDescription className="mt-1 text-sm text-red-600">
                                     {errors.subject_id}
