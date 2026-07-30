@@ -39,11 +39,20 @@ class UserController implements HasMiddleware
                         ->orWhere('email', 'like', '%' . request()->q . '%');
                 });
             })
+            ->when(request()->group_id, function ($query) {
+                $query->where('group_id', request()->group_id);
+            })
+            ->when(request()->role_id, function ($query) {
+                $query->whereHas('roles', fn($q) => $q->where('id', request()->role_id));
+            })
             ->latest()
             ->paginate(5)
             ->withQueryString();
 
-        return Inertia::render('Admin/Users/Index', compact('users'));
+        $roles = Role::select('id', 'name')->orderBy('name')->get();
+        $groups = Group::where('is_active', true)->select('id', 'name')->get();
+
+        return Inertia::render('Admin/Users/Index', compact('users', 'roles', 'groups'));
     }
 
     public function create(): Response

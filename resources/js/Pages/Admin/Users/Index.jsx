@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage, router } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
 import hasAnyPermission from "@/utils/permissions";
 import { Edit } from "lucide-react";
@@ -19,9 +19,34 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { APP_URL } from "@/constants/app";
 import { Badge } from "@/Components/ui/badge";
+import GroupSelect from "@/Components/form/GroupSelect";
+import RoleSelect from "@/Components/form/RoleSelect";
 
 export default function UsersIndex() {
-    const { users } = usePage().props;
+    const { users, roles, groups } = usePage().props;
+
+    const selectedGroup = new URLSearchParams(window.location.search).get("group_id") || "";
+    const selectedRole = new URLSearchParams(window.location.search).get("role_id") || "";
+
+    const handleFilterGroup = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("group_id", val);
+        } else {
+            queryParams.delete("group_id");
+        }
+        router.get(`/admin/users?${queryParams.toString()}`);
+    };
+
+    const handleFilterRole = (val) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (val) {
+            queryParams.set("role_id", val);
+        } else {
+            queryParams.delete("role_id");
+        }
+        router.get(`/admin/users?${queryParams.toString()}`);
+    };
 
     return (
         <>
@@ -37,7 +62,33 @@ export default function UsersIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/users" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/users" />
+                        </div>
+                        <div className="flex w-full sm:w-1/2 items-center gap-2">
+                            {groups && groups.length > 0 && (
+                                <div className="w-1/2">
+                                    <GroupSelect
+                                        groups={groups}
+                                        value={selectedGroup}
+                                        onChange={handleFilterGroup}
+                                        placeholder="Semua Grup"
+                                    />
+                                </div>
+                            )}
+                            {roles && roles.length > 0 && (
+                                <div className="w-1/2">
+                                    <RoleSelect
+                                        roles={roles}
+                                        value={selectedRole}
+                                        onChange={handleFilterRole}
+                                        placeholder="Semua Role"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
                     <Table>
                         <TableHeader>
