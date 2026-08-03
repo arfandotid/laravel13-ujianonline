@@ -108,6 +108,14 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
     // route resource untuk subject
     Route::resource('/subjects', App\Http\Controllers\Admin\SubjectController::class)->names('admin.subjects');
 
+    // route import question
+    Route::get('/questions/import/template', [\App\Http\Controllers\Admin\QuestionController::class, 'importTemplate'])
+        ->name('admin.questions.import.template');
+    Route::post('/questions/import/preview', [\App\Http\Controllers\Admin\QuestionController::class, 'importPreview'])
+        ->name('admin.questions.import.preview');
+    Route::post('/questions/import', [\App\Http\Controllers\Admin\QuestionController::class, 'import'])
+        ->name('admin.questions.import');
+
     // route resource untuk question
     Route::resource('/questions', App\Http\Controllers\Admin\QuestionController::class)->names('admin.questions');
 

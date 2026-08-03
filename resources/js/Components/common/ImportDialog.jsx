@@ -21,6 +21,13 @@ import {
 import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
+import {
     Table,
     TableHeader,
     TableRow,
@@ -37,6 +44,7 @@ export default function ImportDialog({
     previewUrl,
     importUrl,
     columns = [],
+    extraFields = [],
     triggerLabel = "Import",
 }) {
     const [open, setOpen] = useState(false);
@@ -45,6 +53,7 @@ export default function ImportDialog({
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
+    const [fieldValues, setFieldValues] = useState({});
 
     const reset = () => {
         setFile(null);
@@ -52,6 +61,7 @@ export default function ImportDialog({
         setLoading(false);
         setSubmitting(false);
         setError("");
+        setFieldValues({});
     };
 
     const handleOpenChange = (val) => {
@@ -74,11 +84,28 @@ export default function ImportDialog({
             return;
         }
 
+        const missingRequired = extraFields.find(
+            (field) =>
+                field.required &&
+                !String(fieldValues[field.name] ?? "").trim(),
+        );
+
+        if (missingRequired) {
+            setError(`${missingRequired.label} wajib diisi terlebih dahulu.`);
+            return;
+        }
+
         setLoading(true);
         setError("");
 
         const formData = new FormData();
         formData.append("file", file);
+
+        extraFields.forEach((field) => {
+            if (fieldValues[field.name]) {
+                formData.append(field.name, fieldValues[field.name]);
+            }
+        });
 
         try {
             const { data } = await axios.post(previewUrl, formData);
@@ -134,6 +161,45 @@ export default function ImportDialog({
 
                         {!preview ? (
                             <>
+                                {extraFields.map((field) => (
+                                    <Field key={field.name}>
+                                        <FieldLabel>{field.label}</FieldLabel>
+                                        <Select
+                                            value={String(
+                                                fieldValues[field.name] ?? "",
+                                            )}
+                                            onValueChange={(val) =>
+                                                setFieldValues((prev) => ({
+                                                    ...prev,
+                                                    [field.name]: val,
+                                                }))
+                                            }
+                                            disabled={loading}
+                                        >
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue
+                                                    placeholder={
+                                                        field.placeholder ||
+                                                        "Pilih..."
+                                                    }
+                                                />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {field.options.map((opt) => (
+                                                    <SelectItem
+                                                        key={opt.value}
+                                                        value={String(
+                                                            opt.value,
+                                                        )}
+                                                    >
+                                                        {opt.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </Field>
+                                ))}
+
                                 <Field>
                                     <FieldLabel>File Excel</FieldLabel>
                                     <Input

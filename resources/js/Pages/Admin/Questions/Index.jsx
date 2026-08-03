@@ -18,6 +18,7 @@ import {
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
 import SubjectSelect from "@/Components/form/SubjectSelect";
+import ImportDialog from "@/Components/common/ImportDialog";
 
 export default function QuestionsIndex() {
     const { questions, subjects } = usePage().props;
@@ -52,16 +53,55 @@ export default function QuestionsIndex() {
                         <div className="w-full sm:w-1/2">
                             <Search URL="/admin/questions" />
                         </div>
-                        {subjects && subjects.length > 0 && (
-                            <div className="w-full sm:w-1/3">
+                        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                            {subjects && subjects.length > 0 && (
                                 <SubjectSelect
                                     subjects={subjects}
                                     value={selectedSubject}
                                     onChange={handleFilterSubject}
                                     placeholder="Semua Mata Pelajaran"
+                                    className="w-full sm:w-56"
                                 />
-                            </div>
-                        )}
+                            )}
+                            {hasAnyPermission(["questions.create"]) && (
+                                <ImportDialog
+                                    title="Import Bank Soal"
+                                    description="Import soal secara massal menggunakan file excel. Mata pelajaran dipilih pada dialog ini dan berlaku untuk semua baris."
+                                    downloadUrl="/admin/questions/import/template"
+                                    previewUrl="/admin/questions/import/preview"
+                                    importUrl="/admin/questions/import"
+                                    triggerLabel="Import"
+                                    extraFields={[
+                                        {
+                                            name: "subject_id",
+                                            label: "Mata Pelajaran",
+                                            placeholder: "Pilih mata pelajaran",
+                                            required: true,
+                                            options: subjects.map((s) => ({
+                                                value: s.id,
+                                                label: s.name,
+                                            })),
+                                        },
+                                    ]}
+                                    columns={[
+                                        { key: "type", label: "Tipe" },
+                                        {
+                                            key: "question_text",
+                                            label: "Soal",
+                                        },
+                                        {
+                                            key: "options_summary",
+                                            label: "Opsi",
+                                        },
+                                        {
+                                            key: "answer",
+                                            label: "Jawaban Benar",
+                                        },
+                                        { key: "status", label: "Status" },
+                                    ]}
+                                />
+                            )}
+                        </div>
                     </div>
 
                     <Table>
