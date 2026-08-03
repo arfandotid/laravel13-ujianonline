@@ -6,6 +6,7 @@ import PageHeader from "@/Components/common/PageHeader";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
+import QuestionSelect from "@/Components/form/QuestionSelect";
 import {
     Table,
     TableHeader,
@@ -117,19 +118,14 @@ export default function ExamsQuestions() {
                         <h3 className="font-semibold text-base">
                             Pilih Soal dari Bank Soal ({exam.subject?.name})
                         </h3>
-                        <div className="flex gap-3 items-center">
-                            <select
+                        <div className="flex flex-col gap-3 items-left">
+                            <QuestionSelect
                                 value={selectedQuestionId}
-                                onChange={(e) => setSelectedQuestionId(e.target.value)}
-                                className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                            >
-                                <option value="">-- Pilih Soal untuk Ditambahkan --</option>
-                                {unassignedQuestions.map((q) => (
-                                    <option key={q.id} value={q.id}>
-                                        [{q.type === "multiple_choice" ? "PG" : "Essay"}] {q.question_text.substring(0, 80)}...
-                                    </option>
-                                ))}
-                            </select>
+                                onChange={setSelectedQuestionId}
+                                questions={unassignedQuestions}
+                                placeholder="-- Pilih Soal untuk Ditambahkan --"
+                                className="flex-1"
+                            />
                             <Button
                                 type="button"
                                 onClick={handleAddQuestion}
