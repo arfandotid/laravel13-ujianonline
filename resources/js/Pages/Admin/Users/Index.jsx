@@ -21,6 +21,7 @@ import { APP_URL } from "@/constants/app";
 import { Badge } from "@/Components/ui/badge";
 import GroupSelect from "@/Components/form/GroupSelect";
 import RoleSelect from "@/Components/form/RoleSelect";
+import DialogImport from "./_components/DialogImport";
 
 export default function UsersIndex() {
     const { users, roles, groups } = usePage().props;
@@ -68,7 +69,7 @@ export default function UsersIndex() {
                         </div>
                         <div className="flex w-full sm:w-1/2 items-center gap-2">
                             {groups && groups.length > 0 && (
-                                <div className="w-1/2">
+                                <div className="flex-1">
                                     <GroupSelect
                                         groups={groups}
                                         value={selectedGroup}
@@ -78,7 +79,7 @@ export default function UsersIndex() {
                                 </div>
                             )}
                             {roles && roles.length > 0 && (
-                                <div className="w-1/2">
+                                <div className="flex-1">
                                     <RoleSelect
                                         roles={roles}
                                         value={selectedRole}
@@ -86,6 +87,9 @@ export default function UsersIndex() {
                                         placeholder="Semua Role"
                                     />
                                 </div>
+                            )}
+                            {hasAnyPermission(["users.create"]) && (
+                                <DialogImport groups={groups} />
                             )}
                         </div>
                     </div>

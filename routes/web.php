@@ -71,6 +71,14 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
     // route resource untuk role
     Route::resource('/roles', App\Http\Controllers\Admin\RoleController::class)->names('admin.roles');
 
+    // route import participant
+    Route::get('/users/import/template', [\App\Http\Controllers\Admin\UserController::class, 'importTemplate'])
+        ->name('admin.users.import.template');
+    Route::post('/users/import/preview', [\App\Http\Controllers\Admin\UserController::class, 'importPreview'])
+        ->name('admin.users.import.preview');
+    Route::post('/users/import', [\App\Http\Controllers\Admin\UserController::class, 'import'])
+        ->name('admin.users.import');
+
     // route resource untuk user
     Route::resource('/users', App\Http\Controllers\Admin\UserController::class)->names('admin.users');
 
