@@ -17,6 +17,7 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import ImportDialog from "@/Components/common/ImportDialog";
 
 export default function SubjectsIndex() {
     const { subjects } = usePage().props;
@@ -35,7 +36,28 @@ export default function SubjectsIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/subjects" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/subjects" />
+                        </div>
+                        <div className="w-full sm:w-auto">
+                            {hasAnyPermission(["subjects.create"]) && (
+                                <ImportDialog
+                                    title="Import Mata Pelajaran"
+                                    description="Import mata pelajaran secara massal menggunakan file excel."
+                                    downloadUrl="/admin/subjects/import/template"
+                                    previewUrl="/admin/subjects/import/preview"
+                                    importUrl="/admin/subjects/import"
+                                    triggerLabel="Import"
+                                    columns={[
+                                        { key: "name", label: "Nama" },
+                                        { key: "description", label: "Deskripsi" },
+                                        { key: "status", label: "Status" },
+                                    ]}
+                                />
+                            )}
+                        </div>
+                    </div>
 
                     <Table>
                         <TableHeader>

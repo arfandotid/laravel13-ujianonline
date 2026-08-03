@@ -86,8 +86,24 @@ Route::group(['middleware' => ['auth', 'role:admin'], 'prefix' => 'admin'], func
     Route::delete('/users/{user}/delete-avatar', [App\Http\Controllers\Admin\UserController::class, 'deleteAvatar'])
         ->name('admin.users.delete-avatar');
 
+    // route import group
+    Route::get('/groups/import/template', [\App\Http\Controllers\Admin\GroupController::class, 'importTemplate'])
+        ->name('admin.groups.import.template');
+    Route::post('/groups/import/preview', [\App\Http\Controllers\Admin\GroupController::class, 'importPreview'])
+        ->name('admin.groups.import.preview');
+    Route::post('/groups/import', [\App\Http\Controllers\Admin\GroupController::class, 'import'])
+        ->name('admin.groups.import');
+
     // route resource untuk group
     Route::resource('/groups', App\Http\Controllers\Admin\GroupController::class)->names('admin.groups');
+
+    // route import subject
+    Route::get('/subjects/import/template', [\App\Http\Controllers\Admin\SubjectController::class, 'importTemplate'])
+        ->name('admin.subjects.import.template');
+    Route::post('/subjects/import/preview', [\App\Http\Controllers\Admin\SubjectController::class, 'importPreview'])
+        ->name('admin.subjects.import.preview');
+    Route::post('/subjects/import', [\App\Http\Controllers\Admin\SubjectController::class, 'import'])
+        ->name('admin.subjects.import');
 
     // route resource untuk subject
     Route::resource('/subjects', App\Http\Controllers\Admin\SubjectController::class)->names('admin.subjects');

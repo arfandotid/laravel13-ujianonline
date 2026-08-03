@@ -5,96 +5,28 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Spatie\Permission\Models\Role;
 
-class UserImportService
+class UserImportService extends ExcelImportService
 {
-    public const TEMPLATE_HEADINGS = ['Nama', 'Email', 'Username'];
-
     public const DEFAULT_PASSWORD = 'password';
 
-    /**
-     * Membuat spreadsheet template yang siap didownload.
-     */
-    public function createTemplateSpreadsheet(): Spreadsheet
+    public function columnMap(): array
     {
-        $spreadsheet = new Spreadsheet;
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setTitle('Template');
-
-        $sheet->fromArray(self::TEMPLATE_HEADINGS, null, 'A1');
-        $sheet->fromArray(['Nama Peserta Contoh', 'peserta.contoh@gmail.com', 'peserta001'], null, 'A2');
-
-        foreach (range('A', 'C') as $column) {
-            $sheet->getColumnDimension($column)->setAutoSize(true);
-        }
-        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
-
-        return $spreadsheet;
+        return [
+            'Nama' => 'name',
+            'Email' => 'email',
+            'Username' => 'username',
+        ];
     }
 
-    /**
-     * Membaca baris dari file excel menjadi array row (name, email, username).
-     *
-     * @return array{rows: array<int, array{row: int, name: string, email: string, username: string}>, error: ?string}
-     */
-    public function readRows(string $path): array
+    public function sampleRow(): array
     {
-        try {
-            $spreadsheet = IOFactory::load($path);
-        } catch (\Throwable $e) {
-            return ['rows' => [], 'error' => 'File tidak dapat dibaca. Pastikan file berformat .xlsx atau .xls dan tidak rusak.'];
-        }
-
-        $data = $spreadsheet->getActiveSheet()->toArray(null, true, false);
-
-        if (empty($data) || count($data) < 2) {
-            return ['rows' => [], 'error' => 'File tidak memiliki data baris. Silakan gunakan template yang disediakan.'];
-        }
-
-        $headings = array_map(fn ($col) => mb_strtolower(trim((string) $col)), $data[0]);
-        $columns = [
-            'name' => array_search('nama', $headings, true),
-            'email' => array_search('email', $headings, true),
-            'username' => array_search('username', $headings, true),
+        return [
+            'name' => 'Nama Peserta Contoh',
+            'email' => 'peserta.contoh@gmail.com',
+            'username' => 'peserta001',
         ];
-
-        if (in_array(false, $columns, true)) {
-            return [
-                'rows' => [],
-                'error' => 'Kolom pada file tidak sesuai. Wajib memiliki kolom: '.implode(', ', self::TEMPLATE_HEADINGS).'.',
-            ];
-        }
-
-        $rows = [];
-        foreach ($data as $index => $line) {
-            if ($index === 0) {
-                continue;
-            }
-
-            $name = trim((string) ($line[$columns['name']] ?? ''));
-            $email = trim((string) ($line[$columns['email']] ?? ''));
-            $username = trim((string) ($line[$columns['username']] ?? ''));
-
-            if ($name === '' && $email === '' && $username === '') {
-                continue;
-            }
-
-            $rows[] = [
-                'row' => $index + 1,
-                'name' => $name,
-                'email' => $email,
-                'username' => $username,
-            ];
-        }
-
-        if (empty($rows)) {
-            return ['rows' => [], 'error' => 'File tidak memiliki data baris. Silakan isi data pada file excel.'];
-        }
-
-        return ['rows' => $rows, 'error' => null];
     }
 
     /**
@@ -102,7 +34,7 @@ class UserImportService
      *
      * @return array{rows: array<int, array{row: int, name: string, email: string, username: string, errors: list<string>}>, has_errors: bool}
      */
-    public function validateRows(array $rows, int $groupId): array
+    public function validateRows(array $rows): array
     {
         $emailsInFile = [];
         $usernamesInFile = [];

@@ -17,6 +17,7 @@ import {
     TableCell,
 } from "@/Components/table/BasicTable";
 import { Badge } from "@/Components/ui/badge";
+import ImportDialog from "@/Components/common/ImportDialog";
 
 export default function GroupsIndex() {
     const { groups } = usePage().props;
@@ -35,7 +36,28 @@ export default function GroupsIndex() {
                 />
 
                 <div className="space-y-5">
-                    <Search URL="/admin/groups" />
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="w-full sm:w-1/2">
+                            <Search URL="/admin/groups" />
+                        </div>
+                        <div className="w-full sm:w-auto">
+                            {hasAnyPermission(["groups.create"]) && (
+                                <ImportDialog
+                                    title="Import Group"
+                                    description="Import group rombel secara massal menggunakan file excel."
+                                    downloadUrl="/admin/groups/import/template"
+                                    previewUrl="/admin/groups/import/preview"
+                                    importUrl="/admin/groups/import"
+                                    triggerLabel="Import"
+                                    columns={[
+                                        { key: "name", label: "Nama" },
+                                        { key: "description", label: "Deskripsi" },
+                                        { key: "status", label: "Status" },
+                                    ]}
+                                />
+                            )}
+                        </div>
+                    </div>
 
                     <Table>
                         <TableHeader>

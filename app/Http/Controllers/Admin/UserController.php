@@ -200,7 +200,7 @@ class UserController implements HasMiddleware
             return response()->json(['message' => $read['error']], 422);
         }
 
-        $preview = $this->userImportService->validateRows($read['rows'], (int) $validated['group_id']);
+        $preview = $this->userImportService->validateRows($read['rows']);
 
         session()->put("user_import_{$token}", [
             'path' => $path,
@@ -244,7 +244,7 @@ class UserController implements HasMiddleware
             return redirect()->route('admin.users.index')->with('error', $read['error']);
         }
 
-        $preview = $this->userImportService->validateRows($read['rows'], (int) $validated['group_id']);
+        $preview = $this->userImportService->validateRows($read['rows']);
 
         if ($preview['has_errors']) {
             return redirect()
