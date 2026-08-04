@@ -6,6 +6,7 @@ import { Field, FieldDescription, FieldLabel } from "@/Components/ui/field";
 import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Button } from "@/Components/ui/button";
+import { Checkbox } from "@/Components/ui/checkbox";
 import StatusSelect from "@/Components/form/StatusSelect";
 import SubjectSelect from "@/Components/form/SubjectSelect";
 
@@ -129,40 +130,30 @@ export default function ExamsCreate() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-md bg-card">
-                            <Field className="flex items-center space-x-3 space-y-0">
-                                <input
-                                    type="checkbox"
+                            <Field orientation="horizontal">
+                                <Checkbox
                                     id="shuffle_questions"
                                     checked={data.shuffle_questions}
-                                    onChange={(e) =>
-                                        setData("shuffle_questions", e.target.checked)
+                                    onCheckedChange={(val) =>
+                                        setData("shuffle_questions", val)
                                     }
-                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                                 />
-                                <label
-                                    htmlFor="shuffle_questions"
-                                    className="text-sm font-medium leading-none cursor-pointer"
-                                >
+                                <FieldLabel htmlFor="shuffle_questions">
                                     Acak Urutan Soal
-                                </label>
+                                </FieldLabel>
                             </Field>
 
-                            <Field className="flex items-center space-x-3 space-y-0">
-                                <input
-                                    type="checkbox"
+                            <Field orientation="horizontal">
+                                <Checkbox
                                     id="shuffle_answers"
                                     checked={data.shuffle_answers}
-                                    onChange={(e) =>
-                                        setData("shuffle_answers", e.target.checked)
+                                    onCheckedChange={(val) =>
+                                        setData("shuffle_answers", val)
                                     }
-                                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                                 />
-                                <label
-                                    htmlFor="shuffle_answers"
-                                    className="text-sm font-medium leading-none cursor-pointer"
-                                >
+                                <FieldLabel htmlFor="shuffle_answers">
                                     Acak Pilihan Jawaban
-                                </label>
+                                </FieldLabel>
                             </Field>
                         </div>
 
