@@ -84,6 +84,7 @@ function AnswerItem({ result, index }) {
     const isCorrect = result.is_correct === true;
     const isWrong = result.is_correct === false;
     const isEssay = result.type === "essay";
+    const isGraded = result.points_earned != null;
     const isUnanswered = !result.answer_text;
 
     return (
@@ -93,7 +94,9 @@ function AnswerItem({ result, index }) {
                     className={cn(
                         "mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full",
                         isEssay
-                            ? "bg-muted/60 text-muted-foreground"
+                            ? isGraded
+                                ? "bg-emerald-500/20 text-emerald-400"
+                                : "bg-muted/60 text-muted-foreground"
                             : isCorrect
                             ? "bg-emerald-500/20 text-emerald-400"
                             : isUnanswered
@@ -102,7 +105,11 @@ function AnswerItem({ result, index }) {
                     )}
                 >
                     {isEssay ? (
-                        <MinusCircle className="size-3.5" />
+                        isGraded ? (
+                            <CheckCircle2 className="size-3.5" />
+                        ) : (
+                            <MinusCircle className="size-3.5" />
+                        )
                     ) : isCorrect ? (
                         <CheckCircle2 className="size-3.5" />
                     ) : isUnanswered ? (
@@ -136,9 +143,18 @@ function AnswerItem({ result, index }) {
                             </Badge>
                         )}
                         {isEssay && (
-                            <Badge variant="secondary" className="text-xs">
-                                Essay — Belum dinilai
-                            </Badge>
+                            isGraded ? (
+                                <Badge
+                                    variant="outline"
+                                    className="border-emerald-500/20 text-emerald-400"
+                                >
+                                    {`+${Number(result.points_earned ?? 0).toFixed(0)} poin`}
+                                </Badge>
+                            ) : (
+                                <Badge variant="secondary" className="text-xs">
+                                    Essay — Belum dinilai
+                                </Badge>
+                            )
                         )}
                     </div>
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">

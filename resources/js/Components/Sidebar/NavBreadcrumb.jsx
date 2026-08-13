@@ -30,9 +30,6 @@ export default function NavBreadcrumb() {
                 </BreadcrumbItem>
 
                 {filteredSegments.map((segment, index) => {
-                    const href =
-                        "/" + filteredSegments.slice(0, index + 1).join("/");
-
                     const isLast = index === filteredSegments.length - 1;
 
                     const label =
@@ -40,16 +37,16 @@ export default function NavBreadcrumb() {
                         segment.slice(1).replace("-", " ");
 
                     return (
-                        <Fragment key={href}>
+                        <Fragment key={index}>
                             <BreadcrumbSeparator className="hidden md:block" />
 
                             <BreadcrumbItem className="hidden md:block">
                                 {isLast ? (
                                     <BreadcrumbPage>{label}</BreadcrumbPage>
                                 ) : (
-                                    <BreadcrumbLink asChild>
-                                        <Link href={href}>{label}</Link>
-                                    </BreadcrumbLink>
+                                    <BreadcrumbPage className="text-muted-foreground">
+                                        {label}
+                                    </BreadcrumbPage>
                                 )}
                             </BreadcrumbItem>
                         </Fragment>
