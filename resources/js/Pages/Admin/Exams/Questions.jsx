@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import LayoutApp from "@/Layouts/LayoutApp";
-import { Save, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Save, Plus, Trash2, ArrowLeft, ListPlus } from "lucide-react";
+import Swal from "sweetalert2";
 import PageHeader from "@/Components/common/PageHeader";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
@@ -78,6 +79,32 @@ export default function ExamsQuestions() {
         updateFormState(updated);
     };
 
+    const handleAddAllQuestions = () => {
+        if (unassignedQuestions.length === 0) return;
+
+        Swal.fire({
+            title: "Tambahkan Semua Soal?",
+            text: `Anda akan menambahkan ${unassignedQuestions.length} soal ke ujian ini.`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ya, Tambahkan Semua!",
+            cancelButtonText: "Batal",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const additions = unassignedQuestions.map((q, idx) => ({
+                    question_id: q.id,
+                    question_text: q.question_text,
+                    type: q.type,
+                    points: 10,
+                    order: assigned.length + idx + 1,
+                }));
+                updateFormState([...assigned, ...additions]);
+            }
+        });
+    };
+
     const handleRemoveQuestion = (questionId) => {
         const updated = assigned.filter((item) => item.question_id !== questionId);
         updateFormState(updated);
@@ -126,14 +153,31 @@ export default function ExamsQuestions() {
                                 placeholder="-- Pilih Soal untuk Ditambahkan --"
                                 className="flex-1"
                             />
-                            <Button
-                                type="button"
-                                onClick={handleAddQuestion}
-                                disabled={!selectedQuestionId}
-                            >
-                                <Plus className="h-4 w-4 mr-1" />
-                                Tambahkan Soal
-                            </Button>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <Button
+                                    type="button"
+                                    onClick={handleAddQuestion}
+                                    disabled={!selectedQuestionId}
+                                >
+                                    <Plus className="h-4 w-4 mr-1" />
+                                    Tambahkan Soal
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleAddAllQuestions}
+                                    disabled={unassignedQuestions.length === 0}
+                                >
+                                    <ListPlus className="h-4 w-4 mr-1" />
+                                    Tambahkan Semua Soal (
+                                    {unassignedQuestions.length})
+                                </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Tambahkan semua soal sekaligus dari bank soal
+                                mata pelajaran ini. Anda tetap bisa mengubah
+                                urutan dan poin setiap soal setelahnya.
+                            </p>
                         </div>
                     </div>
 
