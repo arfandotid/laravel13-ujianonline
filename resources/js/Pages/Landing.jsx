@@ -174,7 +174,7 @@ function Hero() {
                                         {
                                             label: "Soal 3",
                                             status: "Selesai",
-                                            good: false,
+                                            good: true,
                                         },
                                         {
                                             label: "Soal 4",
