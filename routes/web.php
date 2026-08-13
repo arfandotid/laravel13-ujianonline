@@ -4,8 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Participant;
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    $user = auth()->user();
+
+    if ($user) {
+        return $user->hasRole('participant')
+            ? redirect()->route('participant.dashboard')
+            : redirect()->route('admin.dashboard');
+    }
+
+    return app(\App\Http\Controllers\LandingController::class)->index();
+})->name('landing');
 
 // route login
 Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'index'])
